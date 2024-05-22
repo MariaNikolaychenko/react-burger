@@ -1,0 +1,41 @@
+.nav {
+	display: flex;
+	align-self: center;
+	width: 100%;
+}
+
+.link {
+	display: inline-flex;
+	text-decoration: none;
+	color: #8585AD;
+	padding: 20px;
+	transition: all .3s;
+}
+
+.link:not(.navLinkLast) {
+	margin-right: 8px;
+}
+
+.link svg {
+	transition: all .3s;
+}
+
+.link:hover {
+	color: #F2F2F3;
+}
+
+.link:hover svg {
+	fill: #F2F2F3;
+}
+
+.linkLast {
+	margin-left: auto;
+}
+
+.linkActive {
+	color: #F2F2F3;
+}
+
+.text {
+	padding-left: 8px;
+}

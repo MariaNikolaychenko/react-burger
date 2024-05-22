@@ -1,0 +1,22 @@
+.title {
+	margin-top: 40px;
+	margin-bottom: 20px;
+}
+
+.container {
+	height: calc(100vh - 88px - 100px - 56px - 20px); /* viewportHeight - header - title - tabs - marginBottom */
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.title {
+	margin-top: 40px;
+	margin-bottom: 24px;
+}
+
+.cardList {
+	display: grid;
+	grid-template: auto / 1fr 1fr;
+	grid-gap: 24px 32px;
+	padding: 0 16px;
+}

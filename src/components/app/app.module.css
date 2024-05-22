@@ -1,0 +1,37 @@
+:root {
+	--header-bg-color: #1C1C21;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+.wrapper {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+	max-width: 1240px;
+	margin: 0 auto;
+	box-sizing: border-box;
+}
+
+.twoColumnGrid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-gap: 40px;
+	width: 100%;
+}
+
+.header {
+	position: relative;
+	background-color: var(--header-bg-color);
+	display: flex;
+	align-items: center;
+	height: 88px;
+}
+
+.burgerIngredients {
+	display: flex;
+	flex-direction: column;
+}

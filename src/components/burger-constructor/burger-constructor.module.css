@@ -1,0 +1,44 @@
+@value pl-4 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
+
+.container {
+	composes: pl-4;
+	margin-top: 100px;
+	max-height: calc(100vh - 88px - 100px - 20px); /* viewportHeight - header - marginTop */
+}
+
+.bun {
+	display: block;
+}
+
+.list {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+}
+
+.ingredients {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+	max-height: calc(100vh - 88px - 100px - 20px - 180px - 88px); /* viewportHeight - header - marginTop - marginBottom - 2 buns - totalPrice */
+	overflow-y: auto;
+	overflow-x: hidden;
+	width: calc(100% + 16px);
+	padding-right: 16px;
+	box-sizing: border-box;
+}
+
+.widthAuto {
+	width: auto;
+}
+
+.dragDropContainer {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.total {
+	display: flex;
+	justify-content: right;
+}
