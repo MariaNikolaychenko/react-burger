@@ -1,3 +1,6 @@
+@value paddings: "@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css";
+@value pl-5, pr-5 from paddings;
+
 :root {
 	--header-bg-color: #1C1C21;
 }
@@ -8,6 +11,7 @@ html, body {
 }
 
 .wrapper {
+	composes: pl-5, pr-5;
 	display: flex;
 	justify-content: space-between;
 	width: 100%;

@@ -1,4 +1,4 @@
-@value pl-4 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
+@value pl-4, ml-8, mt-4 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
 
 .container {
 	composes: pl-4;
@@ -8,6 +8,10 @@
 
 .bun {
 	display: block;
+}
+
+.bunElement {
+	composes: ml-8;
 }
 
 .list {
@@ -47,6 +51,7 @@
 }
 
 .total {
+	composes: mt-4;
 	display: flex;
 	justify-content: right;
 }

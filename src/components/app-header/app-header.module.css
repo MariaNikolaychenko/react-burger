@@ -1,3 +1,6 @@
+@value typography: "@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css";
+@value text, text_type_main-default from typography;
+
 .header {
 	position: relative;
 	background-color: var(--header-bg-color);
@@ -15,6 +18,13 @@
 	box-sizing: border-box;
 }
 
+.logo {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
 .nav {
 	display: flex;
 	align-self: center;
@@ -22,6 +32,7 @@
 }
 
 .link {
+	composes: text, text_type_main-default;
 	display: inline-flex;
 	text-decoration: none;
 	color: #8585AD;

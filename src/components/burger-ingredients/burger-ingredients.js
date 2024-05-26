@@ -62,7 +62,7 @@ const BurgerIngredients = ({ data }) => {
 					Начинки
 				</Tab>
 			</div>
-			<div className={styles.container}>
+			<div className={`custom-scroll ${styles.container}`}>
 				<div>
 					<p className={styles.ingredientTitle}>
 						Булки

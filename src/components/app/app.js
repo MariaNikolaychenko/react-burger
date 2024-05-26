@@ -53,7 +53,7 @@ const App = () => {
 		<>
 			<AppHeader />
 			<main>
-				<div className={`pl-5 pr-5 ${styles.wrapper}`}>
+				<div className={styles.wrapper}>
 					<div className={styles.twoColumnGrid}>
 						<section className={styles.burgerIngredients}>
 							{isLoading && "Загрузка..."}

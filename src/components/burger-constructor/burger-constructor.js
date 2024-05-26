@@ -41,7 +41,7 @@ const BurgerConstructor = ({ data }) => {
 							text={ingredient.name}
 							price={ingredient.price}
 							thumbnail={ingredient.image_mobile}
-							extraClass={`ml-8 ${styles.widthAuto}`}
+							extraClass={`${styles.bunElement} ${styles.widthAuto}`}
 						/>
 					))}
 				</div>
@@ -67,12 +67,12 @@ const BurgerConstructor = ({ data }) => {
 							text={ingredient.name}
 							price={ingredient.price}
 							thumbnail={ingredient.image_mobile}
-							extraClass={`ml-8 ${styles.widthAuto}`}
+							extraClass={`${styles.bunElement} ${styles.widthAuto}`}
 						/>
 					))}
 				</div>
 			</div>
-			<div className={`mt-4 ${styles.total}`}>
+			<div className={styles.total}>
 				<Price price={620} isBig={true} />
 				<Button 
 					onClick={handleOpenModal} 

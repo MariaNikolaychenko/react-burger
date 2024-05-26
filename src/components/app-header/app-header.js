@@ -11,19 +11,19 @@ const AppHeader = () => {
 	return (
 		<header className={styles.header}>
 			<div className={styles.wrapper}>
-				<div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
+				<div className={styles.logo}>
 					<Logo />
 				</div>
 				<nav className={styles.nav}>
-					<a href="/" className={`text text_type_main-default ${styles.link} ${styles.linkActive}`}>
+					<a href="/" className={`${styles.link} ${styles.linkActive}`}>
 						<BurgerIcon type="primary" />
 						<span className={styles.text}>Конструктор</span>
 					</a>
-					<a href="/" className={`text text_type_main-default ${styles.link}`}>
+					<a href="/" className={styles.link}>
 						<ListIcon type="secondary" />
 						<span className={styles.text}>Лента заказов</span>
 					</a>
-					<a href="/" className={`text text_type_main-default ${styles.link} ${styles.linkLast}`}>
+					<a href="/" className={`${styles.link} ${styles.linkLast}`}>
 						<ProfileIcon type="secondary" />
 						<span className={styles.text}>Личный кабинет</span>
 					</a>
