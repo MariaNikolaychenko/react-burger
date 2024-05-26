@@ -1,3 +1,6 @@
+@value typography: "@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css";
+@value text, text_type_digits-default, text_type_digits-medium from typography;
+
 .price {
 	display: inline-flex;
 	align-items: center;
@@ -11,7 +14,15 @@
 	height: 24px;
 }
 
-.sizeLarge svg {
+.sizeDefault {
+	composes: text, text_type_digits-default;
+}
+
+.sizeLarge {
+	composes: text_type_digits-medium;
+}
+
+.sizeLarge  svg {
 	width: 33px;
 	height: 33px;
 }

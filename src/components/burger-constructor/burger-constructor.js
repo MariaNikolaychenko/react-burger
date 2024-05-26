@@ -1,16 +1,17 @@
 import { useState } from 'react';
 import {
+	DragIcon,
 	ConstructorElement, 
 	Button 
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import Price from "../price/price";
-import DragDropIcon from "../drag-drop-icon/drag-drop-icon";
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
+import { ingredientType } from '../../utils/types';
 import PropTypes from 'prop-types';
 
 // индексы тестовых ингредиентов в конструкторе
-import testConstructorIds  from '../../utils/config';
+import { testConstructorIds } from '../../utils/config';
 
 import styles from "../burger-constructor/burger-constructor.module.css";
 
@@ -47,7 +48,7 @@ const BurgerConstructor = ({ data }) => {
 				<div className={`custom-scroll ${styles.ingredients}`}>
 					{testConstructorData.filter(item => item.type !== "bun").map((ingredient, index) => (
 						<div className={styles.dragDropContainer} key={index}>
-							<DragDropIcon />
+							<DragIcon type="primary" />
 							<ConstructorElement								
 								text={ingredient.name}
 								price={ingredient.price}
@@ -98,18 +99,8 @@ export default BurgerConstructor;
 
 BurgerConstructor.propTypes = {
 	data: PropTypes.arrayOf(
-		PropTypes.shape({
-			_id:PropTypes.string,
-			name:PropTypes.string,
-			type: PropTypes.string,
-			proteins: PropTypes.number,
-			fat: PropTypes.number,
-			carbohydrates: PropTypes.number,
-			calories: PropTypes.number,
-			price: PropTypes.number,
-			image: PropTypes.string,
-			image_mobile: PropTypes.string,
-			image_large: PropTypes.string
-		})
+		PropTypes.shape(
+			ingredientType
+		)
 	)
 };

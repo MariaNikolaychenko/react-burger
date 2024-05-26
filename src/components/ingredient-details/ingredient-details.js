@@ -8,15 +8,15 @@ const IngredientDetails = ({ details }) => {
 	return (
 		<div>
 			<img
-				className={`mt-1 mb-4`}
+				className={styles.image}
 				src={image}
 				alt={name}
 			/>
-			<p className={`text text_type_main-medium mb-4`}>
+			<p className={styles.name}>
 				{name}
 			</p>
 			<ul className={styles.list}>
-				<li className={styles.item}>
+				<li className={styles.listItem}>
 					<p className="text text_type_main-default text_color_inactive mb-1">
 						Калории,ккал
 					</p>
@@ -24,7 +24,7 @@ const IngredientDetails = ({ details }) => {
 						{calories}
 					</p>
 				</li>
-				<li className={styles.item}>
+				<li className={styles.listItem}>
 					<p className="text text_type_main-default text_color_inactive mb-1">
 						Белки, г
 					</p>
@@ -32,7 +32,7 @@ const IngredientDetails = ({ details }) => {
 						{proteins}
 					</p>
 				</li>
-				<li className={styles.item}>
+				<li className={styles.listItem}>
 					<p className="text text_type_main-default text_color_inactive mb-1">
 						Жиры, г
 					</p>
@@ -40,7 +40,7 @@ const IngredientDetails = ({ details }) => {
 						{fat}
 					</p>
 				</li>
-				<li className={styles.item}>
+				<li className={styles.listItem}>
 					<p className="text text_type_main-default text_color_inactive mb-1">
 						Углеводы, г
 					</p>

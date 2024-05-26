@@ -1,0 +1,28 @@
+@value paddings: "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
+@value typography: "@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css";
+@value pt-30, pb-15, mt-2, mt-8 from paddings;
+@value text, text_type_digits-large, text_type_main-medium, text_type_main-default, text_color_inactive from typography;
+
+.container {
+	composes: pt-30, pb-15;
+}
+
+.orderNumber {
+	composes: text, text_type_digits-large;
+}
+
+.title {
+	composes: text, text_type_main-medium, mt-8;
+}
+
+.acceptedIcon {
+	margin: 70px 0px 65px;
+}
+
+.orderStatus {
+	composes: text, text_type_main-default;
+}
+
+.orderText {
+	composes: mt-2, text, text_type_main-default, text_color_inactive;
+}

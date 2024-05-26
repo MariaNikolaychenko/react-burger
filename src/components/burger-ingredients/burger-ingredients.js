@@ -3,6 +3,7 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import IngredientCard  from '../ingredient-card/ingredient-card';
 import Modal from '../modal/modal';
 import IngredientDetails from "../ingredient-details/ingredient-details";
+import { ingredientType } from "../../utils/types";
 import PropTypes from 'prop-types';
 
 import styles from './burger-ingredients.module.css';
@@ -10,7 +11,6 @@ import styles from './burger-ingredients.module.css';
 
 const BurgerIngredients = ({ data }) => {
 	const [current, setCurrent] = useState('buns');
-
 
 	const [openModal, setOpenModal] = useState(false);
 	const [ingredientDetails, setIngredientDetails] = useState({
@@ -48,10 +48,10 @@ const BurgerIngredients = ({ data }) => {
 
 	return (
 		<>
-			<p className={`text text_type_main-large ${styles.title}`}>
+			<p className={styles.title}>
 				Соберите бургер
 			</p>
-			<div style={{ display: 'flex' }}>
+			<div className={styles.tabs}>
 				<Tab value="buns" active={current === 'buns'} onClick={setCurrent}>
 					Булки
 				</Tab>
@@ -64,7 +64,7 @@ const BurgerIngredients = ({ data }) => {
 			</div>
 			<div className={styles.container}>
 				<div>
-					<p className={`text text_type_main-medium ${styles.title}`}>
+					<p className={styles.ingredientTitle}>
 						Булки
 					</p>
 					<div className={styles.cardList}>
@@ -76,11 +76,11 @@ const BurgerIngredients = ({ data }) => {
 					</div>
 				</div>
 				<div className={styles.category}>
-					<p className={`text text_type_main-medium ${styles.title}`}>
+					<p className={styles.ingredientTitle}>
 						Соусы
 					</p>
 					<div className={styles.cardList}>
-						{data.filter(ingredient => ingredient.type === "sause").map((ingredient, index) => (
+						{data.filter(ingredient => ingredient.type === "sauce").map((ingredient, index) => (
 							<div key={index} onClick={()=>handleOpenModal(ingredient)}>
 								<IngredientCard data={ingredient} />
 							</div>
@@ -88,7 +88,7 @@ const BurgerIngredients = ({ data }) => {
 					</div>
 				</div>
 				<div className={styles.category}>
-					<p className={`text text_type_main-medium ${styles.title}`}>
+					<p className={styles.ingredientTitle}>
 						Начинки
 					</p>
 					<div className={styles.cardList}>
@@ -116,18 +116,8 @@ export default BurgerIngredients;
 
 BurgerIngredients.propTypes = {
 	data: PropTypes.arrayOf(
-		PropTypes.shape({
-			_id:PropTypes.string,
-			name:PropTypes.string,
-			type: PropTypes.string,
-			proteins: PropTypes.number,
-			fat: PropTypes.number,
-			carbohydrates: PropTypes.number,
-			calories: PropTypes.number,
-			price: PropTypes.number,
-			image: PropTypes.string,
-			image_mobile: PropTypes.string,
-			image_large: PropTypes.string
-		})
+		PropTypes.shape(
+			ingredientType
+		)
 	)
 };

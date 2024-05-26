@@ -11,18 +11,19 @@ import styles from './modal.module.css';
 
 
 const Modal = ({ children, header, onClose }) => {
-	function handlerKeyPress(event) {
-		if (event.keyCode === 27) {
-			event.preventDefault();
-			onClose();
-		}
-	}
 
 	useEffect(() => {
-		document.addEventListener("keydown", handlerKeyPress);
+		function handleCloseModal(evt) {
+			if (evt.key === "Escape") {
+				evt.preventDefault();
+				onClose();
+			}
+		}
+
+		document.addEventListener("keydown", handleCloseModal);
 	
 		return () => {
-			document.removeEventListener("keydown", handlerKeyPress);
+			document.removeEventListener("keydown", handleCloseModal);
 		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
@@ -43,7 +44,7 @@ const Modal = ({ children, header, onClose }) => {
 							<CloseIcon type="primary" />
 						</Button>
 						{header &&
-							<h3 className={`text text_type_main-large ${styles.header}`}>{header}</h3>
+							<h3 className={styles.header}>{header}</h3>
 						}
 						{children}
 					</div>

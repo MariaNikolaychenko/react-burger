@@ -22,8 +22,13 @@ const App = () => {
 			const apiURL = "https://norma.nomoreparties.space/api/ingredients";
 
 			fetch(apiURL)
-				.then((res) => res.json())
-				.then((data) => {
+				.then(res => {
+						if (res.ok) {
+							return res.json();
+						}
+						return Promise.reject(`Ошибка ${res.status}`);
+				})
+				.then(data => {
 					setApiData({ ...apiData, data, isLoading: false });
 				})
 				.catch((e) => {
@@ -46,11 +51,7 @@ const App = () => {
 
 	return (
 		<>
-			<header className={styles.header}>
-				<div className={styles.wrapper}>
-					<AppHeader />
-				</div>
-			</header>
+			<AppHeader />
 			<main>
 				<div className={`pl-5 pr-5 ${styles.wrapper}`}>
 					<div className={styles.twoColumnGrid}>

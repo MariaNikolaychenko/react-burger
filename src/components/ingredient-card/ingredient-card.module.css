@@ -1,3 +1,6 @@
+@value typography: "@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css";
+@value text, text_type_main-default from typography;
+
 .card {
 	display: flex;
 	flex-direction: column;
@@ -7,6 +10,7 @@
 }
 
 .name {
+	composes: text, text_type_main-default;
 	text-align: center;
 	min-height: 48px;
 	padding: 8px 0 4px;

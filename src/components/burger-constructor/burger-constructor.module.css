@@ -38,6 +38,14 @@
 	gap: 8px;
 }
 
+.dragDropContainer svg {
+	flex-shrink: 0;
+}
+
+.dragDropContainer svg:hover {
+	cursor: pointer;
+}
+
 .total {
 	display: flex;
 	justify-content: right;
