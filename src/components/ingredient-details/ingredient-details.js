@@ -1,9 +1,9 @@
-import PropTypes from 'prop-types';
+import { ingredientType } from "../../utils/types";
 
 import styles from "../ingredient-details/ingredient-details.module.css";
 
-const IngredientDetails = ({ details }) => {
-	const { name, image,  calories, proteins, fat, carbohydrates } = details;
+const IngredientDetails = ({ ingredient }) => {
+	const { name, image,  calories, proteins, fat, carbohydrates } = ingredient;
 
 	return (
 		<div>
@@ -56,12 +56,5 @@ const IngredientDetails = ({ details }) => {
 export default IngredientDetails;
 
 IngredientDetails.propTypes = {
-	details: PropTypes.shape({
-		name:PropTypes.string,
-		proteins: PropTypes.number,
-		fat: PropTypes.number,
-		carbohydrates: PropTypes.number,
-		calories: PropTypes.number,
-		image: PropTypes.string
-	})
+	ingredientType
 };

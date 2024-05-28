@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import IngredientCard  from '../ingredient-card/ingredient-card';
+import { useModal } from '../../hooks/useModal';
 import Modal from '../modal/modal';
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import { ingredientType } from "../../utils/types";
@@ -12,38 +13,13 @@ import styles from './burger-ingredients.module.css';
 const BurgerIngredients = ({ data }) => {
 	const [current, setCurrent] = useState('buns');
 
-	const [openModal, setOpenModal] = useState(false);
-	const [ingredientDetails, setIngredientDetails] = useState({
-		name: null,
-		image: null,
-		calories: null,
-		proteins: null,
-		fat: null,
-		carbohydrates: null
-	});
+	const { isModalOpen, openModal, closeModal } = useModal();
+
+	const [ingredientDetails, setIngredientDetails] = useState(null);
 
 	function handleOpenModal(ingredient) {
-		setOpenModal(true);
-		setIngredientDetails({
-			name: ingredient.name,
-			image: ingredient.image_large,
-			calories: ingredient.calories,
-			proteins: ingredient.proteins,
-			fat: ingredient.fat,
-			carbohydrates: ingredient.carbohydrates
-		});
-	}
-
-	function handleCloseModal() {
-		setOpenModal(false);
-		setIngredientDetails({
-			name: null,
-			image: null,
-			calories: null,
-			proteins: null,
-			fat: null,
-			carbohydrates: null
-		});
+		openModal();
+		setIngredientDetails(ingredient);
 	}
 
 	return (
@@ -68,8 +44,8 @@ const BurgerIngredients = ({ data }) => {
 						Булки
 					</p>
 					<div className={styles.cardList}>
-						{data.filter(ingredient => ingredient.type === "bun").map((ingredient, index) => (
-								<div key={index} onClick={()=>handleOpenModal(ingredient)}>
+						{data.filter(ingredient => ingredient.type === "bun").map((ingredient) => (
+								<div key={ingredient._id} onClick={()=>handleOpenModal(ingredient)}>
 									<IngredientCard data={ingredient} />
 								</div>
 						))}
@@ -80,8 +56,8 @@ const BurgerIngredients = ({ data }) => {
 						Соусы
 					</p>
 					<div className={styles.cardList}>
-						{data.filter(ingredient => ingredient.type === "sauce").map((ingredient, index) => (
-							<div key={index} onClick={()=>handleOpenModal(ingredient)}>
+						{data.filter(ingredient => ingredient.type === "sauce").map((ingredient) => (
+							<div key={ingredient._id} onClick={()=>handleOpenModal(ingredient)}>
 								<IngredientCard data={ingredient} />
 							</div>
 						))}
@@ -92,8 +68,8 @@ const BurgerIngredients = ({ data }) => {
 						Начинки
 					</p>
 					<div className={styles.cardList}>
-						{data.filter(ingredient => ingredient.type === "main").map((ingredient, index) => (
-							<div key={index} onClick={()=>handleOpenModal(ingredient)}>
+						{data.filter(ingredient => ingredient.type === "main").map((ingredient) => (
+							<div key={ingredient._id} onClick={()=>handleOpenModal(ingredient)}>
 								<IngredientCard data={ingredient} />
 							</div>
 						))}
@@ -101,13 +77,11 @@ const BurgerIngredients = ({ data }) => {
 				</div>
 			</div>
 
-			{
-			openModal &&
-				<Modal header="Детали ингредиента" onClose={handleCloseModal}>
-					<IngredientDetails details={ingredientDetails} />
+			{isModalOpen &&
+				<Modal header="Детали ингредиента" onClose={closeModal}>
+					<IngredientDetails ingredient={ingredientDetails} />
 				</Modal>
 			}
-
 		</>
 	)
 }
@@ -116,8 +90,6 @@ export default BurgerIngredients;
 
 BurgerIngredients.propTypes = {
 	data: PropTypes.arrayOf(
-		PropTypes.shape(
-			ingredientType
-		)
+		ingredientType
 	)
 };

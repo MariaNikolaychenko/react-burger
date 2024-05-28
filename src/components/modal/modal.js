@@ -15,7 +15,6 @@ const Modal = ({ children, header, onClose }) => {
 	useEffect(() => {
 		function handleCloseModal(evt) {
 			if (evt.key === "Escape") {
-				evt.preventDefault();
 				onClose();
 			}
 		}
@@ -31,7 +30,7 @@ const Modal = ({ children, header, onClose }) => {
 	return ReactDOM.createPortal(
 		(
 			<>
-				<ModalOverlay onClose={onClose}></ModalOverlay>
+				<ModalOverlay onClose={onClose}/>
 				<div className={styles.modal}>
 					<div className={styles.dialog}>
 						<Button

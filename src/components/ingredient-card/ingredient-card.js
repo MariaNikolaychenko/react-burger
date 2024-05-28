@@ -1,7 +1,6 @@
 import { Counter } from '@ya.praktikum/react-developer-burger-ui-components'
 import Price from "../price/price";
 import { ingredientType } from "../../utils/types";
-import PropTypes from 'prop-types';
 
 // индексы тестовых ингредиентов в конструкторе для отображения счётчика
 import { testConstructorIds } from "../../utils/config";
@@ -28,7 +27,5 @@ const IngredientCard = ({ data }) => {
 export default IngredientCard;
 
 IngredientCard.propTypes = {
-	data: PropTypes.shape(
-		ingredientType
-	)
+	data: ingredientType
 };

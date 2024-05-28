@@ -1,10 +1,10 @@
-import { useState } from 'react';
 import {
 	DragIcon,
 	ConstructorElement, 
 	Button 
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import Price from "../price/price";
+import { useModal } from '../../hooks/useModal';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import { ingredientType } from '../../utils/types';
@@ -19,35 +19,29 @@ const BurgerConstructor = ({ data }) => {
 
 	const testConstructorData = testConstructorIds.map((index) => data.find(item => item._id === index));
 
-	const [openModal, setOpenModal] = useState(false);
+	const bun = testConstructorData.find(item => item.type === "bun");
+	const fillings = testConstructorData.filter(item => item.type !== "bun");
 
-	function handleOpenModal() {
-		setOpenModal(true);
-	}
-
-	function handleCloseModal() {
-		setOpenModal(false);
-	}
+	const { isModalOpen, openModal, closeModal } = useModal();
 
 	return (
 		<div className={styles.container}>
 			<div className={styles.list}>
 				<div className={styles.bun}>
-					{testConstructorData.filter(item => item.type === "bun").map((ingredient, index) => (
+					{bun &&
 						<ConstructorElement
-							key={index}
 							type="top"
 							isLocked={true}
-							text={ingredient.name}
-							price={ingredient.price}
-							thumbnail={ingredient.image_mobile}
+							text={`${bun.name} (верх)`}
+							price={bun.price}
+							thumbnail={bun.image_mobile}
 							extraClass={`${styles.bunElement} ${styles.widthAuto}`}
 						/>
-					))}
+					}
 				</div>
 				<div className={`custom-scroll ${styles.ingredients}`}>
-					{testConstructorData.filter(item => item.type !== "bun").map((ingredient, index) => (
-						<div className={styles.dragDropContainer} key={index}>
+					{fillings.map((ingredient) => (
+						<div className={styles.dragDropContainer} key={ingredient._id}>
 							<DragIcon type="primary" />
 							<ConstructorElement								
 								text={ingredient.name}
@@ -59,23 +53,22 @@ const BurgerConstructor = ({ data }) => {
 					))}
 				</div>
 				<div className={styles.bun}>
-					{testConstructorData.filter(item => item.type === "bun").map((ingredient, key) => (
+					{bun &&
 						<ConstructorElement
-							key={key}
-							type="top"
+							type="bottom"
 							isLocked={true}
-							text={ingredient.name}
-							price={ingredient.price}
-							thumbnail={ingredient.image_mobile}
+							text={`${bun.name} (низ)`}
+							price={bun.price}
+							thumbnail={bun.image_mobile}
 							extraClass={`${styles.bunElement} ${styles.widthAuto}`}
 						/>
-					))}
+					}
 				</div>
 			</div>
 			<div className={styles.total}>
 				<Price price={620} isBig={true} />
 				<Button 
-					onClick={handleOpenModal} 
+					onClick={openModal} 
 					htmlType="button" 
 					type="primary" 
 					size="large" 
@@ -85,9 +78,8 @@ const BurgerConstructor = ({ data }) => {
 				</Button>
 			</div>
 
-			{
-			openModal && 
-				<Modal onClose={handleCloseModal}>
+			{isModalOpen && 
+				<Modal onClose={closeModal}>
 					<OrderDetails />
 				</Modal>
 			}
@@ -99,8 +91,6 @@ export default BurgerConstructor;
 
 BurgerConstructor.propTypes = {
 	data: PropTypes.arrayOf(
-		PropTypes.shape(
-			ingredientType
-		)
+		ingredientType
 	)
 };
