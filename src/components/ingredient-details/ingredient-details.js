@@ -3,13 +3,13 @@ import { ingredientType } from "../../utils/types";
 import styles from "../ingredient-details/ingredient-details.module.css";
 
 const IngredientDetails = ({ ingredient }) => {
-	const { name, image,  calories, proteins, fat, carbohydrates } = ingredient;
+	const { name, image_large,  calories, proteins, fat, carbohydrates } = ingredient;
 
 	return (
 		<div>
 			<img
 				className={styles.image}
-				src={image}
+				src={image_large}
 				alt={name}
 			/>
 			<p className={styles.name}>
@@ -56,5 +56,5 @@ const IngredientDetails = ({ ingredient }) => {
 export default IngredientDetails;
 
 IngredientDetails.propTypes = {
-	ingredientType
+	ingredient: ingredientType
 };
