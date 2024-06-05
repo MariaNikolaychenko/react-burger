@@ -15,8 +15,8 @@
 
 .ingredientTitle {
 	composes: text, text_type_main-medium;
-	margin-top: 40px;
-	margin-bottom: 24px;
+	padding-top: 40px;
+	padding-bottom: 24px;
 }
 
 .tabs {

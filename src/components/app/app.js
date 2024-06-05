@@ -1,73 +1,76 @@
-import { 
-	useState, 
-	useEffect 
-} from "react";
+
 import AppHeader from "../app-header/app-header";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+
+import {useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {loadIngredients} from "../../services/burger-ingredients/actions";
+
+
 import styles from "./app.module.css";
 
 const App = () => {
-	const [apiData, setApiData] = useState({
-		isLoading: false,
-		hasError: false,
-		data: [],
-	});
+	const dispatch = useDispatch();
+	const { loading, ingredients, error } = useSelector(state => state.ingredients);
 
 	useEffect(() => {
-		const fetchApiData = async () => {
-			setApiData({ ...apiData, hasError: false, isLoading: true });
+		dispatch(loadIngredients());
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
 
-			const apiURL = "https://norma.nomoreparties.space/api/ingredients";
+	if (loading) {
+		return <h2>Загрузка...</h2>
+	}
+  
+	if (!loading && error) {
+		return <h2>{`Ошибка: {error}`}</h2>
+	}
+  
+	if (!loading && ingredients.length === 0) {
+		return <h2>Нет ингредиентов</h2>
+	}
+  
 
-			fetch(apiURL)
-				.then(res => {
-						if (res.ok) {
-							return res.json();
-						}
-						return Promise.reject(`Ошибка ${res.status}`);
-				})
-				.then(data => {
-					setApiData({ ...apiData, data, isLoading: false });
-				})
-				.catch((e) => {
-					console.log(e);
-					setApiData({
-						...apiData,
-						hasError: true,
-						isLoading: false,
-					});
-				});
-		};
+	// eslint-disable-next-line react-hooks/rules-of-hooks
+	//const [elements, setElements] = useState([]);
+	// eslint-disable-next-line react-hooks/rules-of-hooks
+	//const [draggedElements, setDraggedElements] = useState([]);
 
-		fetchApiData();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	//const handleDrop = (itemId) => {
+	// 	setElements([
+	// 		...elements.filter(element => element.id !== itemId.id)
+	// 	]);
 
-	const { data, isLoading, hasError } = apiData;
-
-	const ingredients = data.data;
+	// 	setDraggedElements([
+	// 		...draggedElements,
+	// 		...elements.filter(element => element.id === itemId.id)
+	// 	]);
+	// };
 
 	return (
 		<>
 			<AppHeader />
 			<main>
 				<div className={styles.wrapper}>
-					<div className={styles.twoColumnGrid}>
-						<section className={styles.burgerIngredients}>
-							{isLoading && "Загрузка..."}
-							{hasError && "Произошла ошибка"}
-							{!isLoading && !hasError && ingredients && (
-								<BurgerIngredients data={ingredients} />
-							)}
-						</section>
-						<section className={styles.burgerConstructor}>
-							{!isLoading && !hasError && ingredients && (
-								<BurgerConstructor data={ingredients} />
-							)}
-						</section>
-					</div>
+					<DndProvider backend={HTML5Backend}>
+						<div className={styles.twoColumnGrid}>
+							<section className={styles.burgerIngredients}>
+								{ingredients && (
+									<BurgerIngredients />
+								)}
+							</section>
+							<section className={styles.burgerConstructor}>
+								{ingredients && (
+									// <BurgerConstructor onDropHandler={handleDrop} data={[]} />
+									<BurgerConstructor />
+								)}
+							</section>
+						</div>
+					</DndProvider>
 				</div>
 			</main>
 		</>

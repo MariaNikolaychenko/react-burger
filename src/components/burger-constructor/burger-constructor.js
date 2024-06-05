@@ -1,74 +1,156 @@
+import {v4 as uuidv4} from 'uuid';
+
+import { useMemo } from "react";
+import { useDrop } from "react-dnd";
+import { useDispatch, useSelector } from "react-redux";
+import { useModal } from '../../hooks/useModal';
+
 import {
-	DragIcon,
 	ConstructorElement, 
 	Button 
 } from "@ya.praktikum/react-developer-burger-ui-components";
+
 import Price from "../price/price";
-import { useModal } from '../../hooks/useModal';
-import Modal from '../modal/modal';
+import ConstructorIngredients from '../constructor-ingredients/constructor-ingredients';
 import OrderDetails from '../order-details/order-details';
+import Modal from '../modal/modal';
+
+import { 
+	ADD_INGREDIENT,
+	ADD_INGREDIENT_BUN
+} from "../../services/burger-constructor/actions";
+import { createOrderAction } from '../../services/order/actions';
+import { getConstructorItems } from '../../services/burger-constructor/selectors';
+import { getOrderData } from '../../services/order/selectors'
+
 import { ingredientType } from '../../utils/types';
 import PropTypes from 'prop-types';
 
-// индексы тестовых ингредиентов в конструкторе
-import { testConstructorIds } from '../../utils/config';
-
 import styles from "../burger-constructor/burger-constructor.module.css";
 
-const BurgerConstructor = ({ data }) => {
+const BurgerConstructor = () => {
 
-	const testConstructorData = testConstructorIds.map((index) => data.find(item => item._id === index));
-
-	const bun = testConstructorData.find(item => item.type === "bun");
-	const fillings = testConstructorData.filter(item => item.type !== "bun");
+	const dispatch = useDispatch();
+	const { bun, fillings } = useSelector(getConstructorItems);
+	const { isOrderFailed, orderNumber } = useSelector(getOrderData);
 
 	const { isModalOpen, openModal, closeModal } = useModal();
 
+	const addIngredientBun = item => {
+		dispatch({
+			type: ADD_INGREDIENT_BUN,
+			...item
+		})
+	}
+
+	const addIngredient = item => {
+		const uuid = uuidv4();
+		dispatch({
+			type: ADD_INGREDIENT,
+			data: {
+				...item.data, 
+				uuid         
+			}
+		})
+	}
+
+	// Drag and drop
+	const [{ canDrop, isOver }, dropTarger] = useDrop({
+		accept: "bun"||"main"||"sauce",
+		collect: monitor => ({
+			isOver: monitor.isOver(),
+			canDrop: monitor.canDrop()
+		}),
+
+		drop(itemData) {
+			itemData.data.type === 'bun'
+			 	? addIngredientBun(itemData)
+			 	: addIngredient(itemData)
+		},
+	});
+
+	const isActive = canDrop || isOver;
+
+	// Итоговая цена
+	const totalPrice = useMemo(()=> {
+		let totalPrice = 0;
+		if (bun) {
+			totalPrice += bun.price * 2;
+		}
+		for (let item of fillings) {
+			totalPrice += item.price;
+		}
+		return totalPrice;
+	}, [bun, fillings])
+
+	// Оформить заказ
+	const onClickOrderCheckout = () => {
+		const order = [bun._id, ...fillings.map((item) => item._id), bun._id];
+		dispatch(createOrderAction(order));
+		openModal();
+	}
+
 	return (
 		<div className={styles.container}>
-			<div className={styles.list}>
+			<div className={`${styles.list} ${isActive ? styles.onHover : ''}`} ref={dropTarger} >
 				<div className={styles.bun}>
-					{bun &&
-						<ConstructorElement
-							type="top"
-							isLocked={true}
-							text={`${bun.name} (верх)`}
-							price={bun.price}
-							thumbnail={bun.image_mobile}
-							extraClass={`${styles.bunElement} ${styles.widthAuto}`}
-						/>
+					{bun 
+						?
+							<ConstructorElement
+								type="top"
+								isLocked={true}
+								text={`${bun.name} (верх)`}
+								price={bun.price}
+								thumbnail={bun.image_mobile}
+								extraClass={`${styles.bunElement} ${styles.widthAuto}`}
+							/>
+						:
+						<div className={`${styles.emptyConstructorItem} ${styles.emptyConstructorItemPosTop}`}>
+							Выберите булку
+						</div>
 					}
 				</div>
+				{/* Начинка */}
 				<div className={`custom-scroll ${styles.ingredients}`}>
-					{fillings.map((ingredient) => (
-						<div className={styles.dragDropContainer} key={ingredient._id}>
-							<DragIcon type="primary" />
-							<ConstructorElement								
-								text={ingredient.name}
-								price={ingredient.price}
-								thumbnail={ingredient.image_mobile}
-								extraClass={styles.widthAuto}
+					{fillings.length !== 0 
+						?
+						fillings.map((ingredient, index) => (
+							<ConstructorIngredients
+								item={ingredient}
+								index={index}
+								uuid={ingredient.uuid}
+								key={ingredient.uuid}
 							/>
+							))
+						:
+						<div className={styles.emptyConstructorItem} >
+							Выберите начинку
 						</div>
-					))}
+					}
 				</div>
+				{/* /Начинка */}
 				<div className={styles.bun}>
-					{bun &&
-						<ConstructorElement
-							type="bottom"
-							isLocked={true}
-							text={`${bun.name} (низ)`}
-							price={bun.price}
-							thumbnail={bun.image_mobile}
-							extraClass={`${styles.bunElement} ${styles.widthAuto}`}
-						/>
+					{bun 
+						?
+							<ConstructorElement
+								type="bottom"
+								isLocked={true}
+								text={`${bun.name} (низ)`}
+								price={bun.price}
+								thumbnail={bun.image_mobile}
+								extraClass={`${styles.bunElement} ${styles.widthAuto}`}
+							/>
+						:
+						<div className={`${styles.emptyConstructorItem} ${styles.emptyConstructorItemPosBottom}`}>
+							Выберите булку
+						</div>
 					}
 				</div>
 			</div>
 			<div className={styles.total}>
-				<Price price={620} isBig={true} />
+				<Price price={totalPrice} isBig={true} />
 				<Button 
-					onClick={openModal} 
+					onClick={onClickOrderCheckout} 
 					htmlType="button" 
 					type="primary" 
 					size="large" 
@@ -78,9 +160,9 @@ const BurgerConstructor = ({ data }) => {
 				</Button>
 			</div>
 
-			{isModalOpen && 
+			{isModalOpen && !isOrderFailed &&
 				<Modal onClose={closeModal}>
-					<OrderDetails />
+					<OrderDetails orderNumber={orderNumber} />
 				</Modal>
 			}
 		</div>

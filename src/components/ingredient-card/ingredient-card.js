@@ -2,24 +2,42 @@ import { Counter } from '@ya.praktikum/react-developer-burger-ui-components'
 import Price from "../price/price";
 import { ingredientType } from "../../utils/types";
 
-// индексы тестовых ингредиентов в конструкторе для отображения счётчика
-import { testConstructorIds } from "../../utils/config";
+import { useDrag } from "react-dnd";
 
 import styles from './ingredient-card.module.css';
 
-const IngredientCard = ({ data }) => {
-	const countIngredient = testConstructorIds.filter(id => id === data._id).length;
+const IngredientCard = ({ data, count }) => {
+
+	const [{ isDragging }, dragRef] = useDrag(() => ({
+		type: "bun"||"main"||"sauce",
+		item: { data },
+		// end: (item, monitor) => {
+		// 	const dropResult = monitor.getDropResult()
+		// 	if (item && dropResult) {
+		// 		handleDropIngredient(item);
+		// 	}
+		// },
+		collect: (monitor) => ({
+			isDragging: monitor.isDragging(),
+			handlerId: monitor.getHandlerId()
+		}),
+	}));
+
+	const opacity = isDragging ? .5 : 1;
+
+	//const countIngredient = testConstructorIds.filter(id => id === data._id).length;
+	//const countIngredient = 0;
 
 	return (
-		<div className={styles.card}>
+		<div style={{ opacity }} className={styles.card} ref={dragRef}>
 			<picture>
 				<source media="(max-width: 769px)" srcSet={data.image_mobile} />
 				<img src={data.image} alt={data.name}/>
 			</picture>
 			<Price price={data.price} />
 			<p className={styles.name}>{data.name}</p>
-			{(countIngredient > 0) && 
-				<Counter count={countIngredient} size="default"/>}
+			{(count > 0) && 
+				<Counter count={count} size="default"/>}
 		</div>
 	)
 }

@@ -1,0 +1,17 @@
+.widthAuto {
+	width: auto;
+}
+
+.dragDropContainer {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.dragDropContainer svg {
+	flex-shrink: 0;
+}
+
+.dragDropContainer svg:hover {
+	cursor: pointer;
+}
