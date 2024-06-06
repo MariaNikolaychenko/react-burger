@@ -23,14 +23,11 @@ import { createOrderAction } from '../../services/order/actions';
 import { getConstructorItems } from '../../services/burger-constructor/selectors';
 import { getOrderData } from '../../services/order/selectors'
 
-import { ingredientType } from '../../utils/types';
-import PropTypes from 'prop-types';
-
 import styles from "../burger-constructor/burger-constructor.module.css";
 
 const BurgerConstructor = () => {
-
 	const dispatch = useDispatch();
+
 	const { bun, fillings } = useSelector(getConstructorItems);
 	const { isOrderFailed, orderNumber } = useSelector(getOrderData);
 
@@ -85,9 +82,11 @@ const BurgerConstructor = () => {
 
 	// Оформить заказ
 	const onClickOrderCheckout = () => {
-		const order = [bun._id, ...fillings.map((item) => item._id), bun._id];
-		dispatch(createOrderAction(order));
-		openModal();
+		if (bun && fillings.length !== 0) {
+			const order = [bun._id, ...fillings.map((item) => item._id), bun._id];
+			dispatch(createOrderAction(order));
+			openModal();
+		}
 	}
 
 	return (
@@ -170,9 +169,3 @@ const BurgerConstructor = () => {
 }
 
 export default BurgerConstructor;
-
-BurgerConstructor.propTypes = {
-	data: PropTypes.arrayOf(
-		ingredientType
-	)
-};

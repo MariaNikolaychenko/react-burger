@@ -3,6 +3,7 @@ import {
 	DragIcon,
 	ConstructorElement
 } from "@ya.praktikum/react-developer-burger-ui-components";
+
 import { useRef } from 'react';
 import { useDrag, useDrop } from "react-dnd";
 import { useDispatch } from "react-redux";
@@ -11,6 +12,9 @@ import {
 	DELETE_INGREDIENT,
 	SORT_INGREDIENTS
 } from "../../services/burger-constructor/actions";
+
+import { ingredientType } from "../../utils/types";
+import PropTypes from 'prop-types';
 
 import styles from "../constructor-ingredients/constructor-ingredients.module.css";
 
@@ -97,3 +101,9 @@ const ConstructorIngredients = ({ item, index, uuid }) => {
 }
 
 export default ConstructorIngredients;
+
+ConstructorIngredients.propTypes = {
+	item: ingredientType,
+	index: PropTypes.number,
+	uuid: PropTypes.string
+};

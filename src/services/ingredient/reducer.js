@@ -5,21 +5,21 @@ import {
 
 
 const initialState = {
-	currentIngredient: {}
+	currentIngredient: null
 };
 
 export const reducer = (state = initialState, action) => {
 	switch (action.type) {
 		case SET_CURRENT_INGREDIENT: {
 			return {
-			...state,
-			currentIngredient: action.data,
+				...state,
+				currentIngredient: action.data,
 			};
 		}
-		case DELETE_CURRENT_INGREDIENT: {
+		case DELETE_CURRENT_INGREDIENT: {	
 			return {
-			...state,
-			currentIngredient: {},
+				...state,
+				currentIngredient: null
 			};
 		}
 		default: {

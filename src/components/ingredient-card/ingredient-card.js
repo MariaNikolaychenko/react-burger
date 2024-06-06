@@ -1,22 +1,17 @@
 import { Counter } from '@ya.praktikum/react-developer-burger-ui-components'
 import Price from "../price/price";
-import { ingredientType } from "../../utils/types";
 
 import { useDrag } from "react-dnd";
+
+import { ingredientType } from "../../utils/types";
+import PropTypes from 'prop-types';
 
 import styles from './ingredient-card.module.css';
 
 const IngredientCard = ({ data, count }) => {
-
 	const [{ isDragging }, dragRef] = useDrag(() => ({
 		type: "bun"||"main"||"sauce",
 		item: { data },
-		// end: (item, monitor) => {
-		// 	const dropResult = monitor.getDropResult()
-		// 	if (item && dropResult) {
-		// 		handleDropIngredient(item);
-		// 	}
-		// },
 		collect: (monitor) => ({
 			isDragging: monitor.isDragging(),
 			handlerId: monitor.getHandlerId()
@@ -24,9 +19,6 @@ const IngredientCard = ({ data, count }) => {
 	}));
 
 	const opacity = isDragging ? .5 : 1;
-
-	//const countIngredient = testConstructorIds.filter(id => id === data._id).length;
-	//const countIngredient = 0;
 
 	return (
 		<div style={{ opacity }} className={styles.card} ref={dragRef}>
@@ -45,5 +37,6 @@ const IngredientCard = ({ data, count }) => {
 export default IngredientCard;
 
 IngredientCard.propTypes = {
-	data: ingredientType
+	data: ingredientType,
+	count: PropTypes.number
 };

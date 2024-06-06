@@ -10,7 +10,6 @@ import {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {loadIngredients} from "../../services/burger-ingredients/actions";
 
-
 import styles from "./app.module.css";
 
 const App = () => {
@@ -33,23 +32,6 @@ const App = () => {
 	if (!loading && ingredients.length === 0) {
 		return <h2>Нет ингредиентов</h2>
 	}
-  
-
-	// eslint-disable-next-line react-hooks/rules-of-hooks
-	//const [elements, setElements] = useState([]);
-	// eslint-disable-next-line react-hooks/rules-of-hooks
-	//const [draggedElements, setDraggedElements] = useState([]);
-
-	//const handleDrop = (itemId) => {
-	// 	setElements([
-	// 		...elements.filter(element => element.id !== itemId.id)
-	// 	]);
-
-	// 	setDraggedElements([
-	// 		...draggedElements,
-	// 		...elements.filter(element => element.id === itemId.id)
-	// 	]);
-	// };
 
 	return (
 		<>
@@ -65,7 +47,6 @@ const App = () => {
 							</section>
 							<section className={styles.burgerConstructor}>
 								{ingredients && (
-									// <BurgerConstructor onDropHandler={handleDrop} data={[]} />
 									<BurgerConstructor />
 								)}
 							</section>

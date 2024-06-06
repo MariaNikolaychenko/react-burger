@@ -1,33 +1,39 @@
-import { useState, useRef, useEffect, useMemo } from "react";
+import { 
+	useState, 
+	useRef, 
+	useEffect, 
+	useMemo
+} from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useModal } from '../../hooks/useModal';
 
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import IngredientCard  from '../ingredient-card/ingredient-card';
 import Modal from '../modal/modal';
+import IngredientCard  from '../ingredient-card/ingredient-card';
 import IngredientDetails from "../ingredient-details/ingredient-details";
-import { ingredientType } from "../../utils/types";
-import PropTypes from 'prop-types';
 
-import { useSelector } from "react-redux";
+import { DELETE_CURRENT_INGREDIENT, SET_CURRENT_INGREDIENT } from "../../services/ingredient/actions";
 import { getIngredientsApi } from "../../services/burger-ingredients/selectors";
 import { getConstructorItems } from "../../services/burger-constructor/selectors";
+import { getCurrentIngredient } from "../../services/ingredient/selectors.js";
 
 import styles from './burger-ingredients.module.css';
 
-
 const BurgerIngredients = () => {
+	const dispatch = useDispatch();
+
 	const ingredients = useSelector(getIngredientsApi);
 	const { bun, fillings } = useSelector(getConstructorItems);
+	const { currentIngredient } = useSelector(getCurrentIngredient);;
 
 	const [current, setCurrent] = useState('buns');
-	const [ingredientDetails, setIngredientDetails] = useState(null);
 	
 	const scrollSectionRef = useRef(null);
 	const bunsRef = useRef(null);
 	const saucesRef = useRef(null);
 	const fillingsRef = useRef(null);
 	
-	const { isModalOpen, openModal, closeModal } = useModal();
+	const { openModal, closeModal } = useModal();
 
 	// Счётчик
 	const getCount = useMemo(() => {
@@ -73,8 +79,13 @@ const BurgerIngredients = () => {
 
 	// Модальное окно
 	function handleOpenModal(ingredient) {
+		dispatch({type: SET_CURRENT_INGREDIENT, data: ingredient});
 		openModal();
-		setIngredientDetails(ingredient);
+	}
+
+	function handleCloseModal(e) {
+		closeModal();
+		dispatch({type: DELETE_CURRENT_INGREDIENT});
 	}
 
 	return (
@@ -132,9 +143,9 @@ const BurgerIngredients = () => {
 				</div>
 			</div>
 
-			{isModalOpen &&
-				<Modal header="Детали ингредиента" onClose={closeModal}>
-					<IngredientDetails ingredient={ingredientDetails} />
+			{currentIngredient &&
+				<Modal header="Детали ингредиента" onClose={handleCloseModal}>
+					<IngredientDetails ingredient={currentIngredient} />
 				</Modal>
 			}
 		</>
@@ -142,9 +153,3 @@ const BurgerIngredients = () => {
 }
 
 export default BurgerIngredients;
-
-BurgerIngredients.propTypes = {
-	data: PropTypes.arrayOf(
-		ingredientType
-	)
-};

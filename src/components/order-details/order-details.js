@@ -1,4 +1,5 @@
 import acceptedImage from "../../images/checkWithBg.svg";
+import PropTypes from 'prop-types';
 
 import styles from "./order-details.module.css";
 
@@ -15,3 +16,7 @@ const OrderDetails = ({ orderNumber }) => {
 }
 
 export default OrderDetails;
+
+OrderDetails.propTypes = {
+	orderNumber: PropTypes.number
+};
