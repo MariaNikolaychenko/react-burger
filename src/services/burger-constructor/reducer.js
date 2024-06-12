@@ -5,6 +5,10 @@ import {
 	SORT_INGREDIENTS
 } from './actions';
 
+import {
+	CLEAR_CONSTRUCTOR
+} from '../order/actions'
+
 const initialState = {
 	bun: null,
 	fillings: []
@@ -43,6 +47,12 @@ export const reducer = ( state = initialState, action) => {
 			return {
 			  ...state,
 			  fillings: fillings
+			}
+		}
+		case CLEAR_CONSTRUCTOR: {
+			return {
+				bun: null,
+				fillings: []
 			}
 		}
 

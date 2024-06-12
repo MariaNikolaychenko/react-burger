@@ -159,7 +159,7 @@ const BurgerConstructor = () => {
 				</Button>
 			</div>
 
-			{isModalOpen && !isOrderFailed &&
+			{isModalOpen && !isOrderFailed && orderNumber &&
 				<Modal onClose={closeModal}>
 					<OrderDetails orderNumber={orderNumber} />
 				</Modal>
