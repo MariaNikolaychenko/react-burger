@@ -1,0 +1,32 @@
+@value typography: "@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css";
+@value text, text_type_main-medium, text_type_main-default, text_color_inactive from typography;
+@value pt-30, pt-4, pb-5 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
+
+.container {
+	composes: pt-30;
+	display: grid;
+    grid-template-columns: 320px 1fr;
+	grid-gap: 60px;
+    width: 100%;
+}
+
+.sidebar {
+	display: flex;
+	flex-direction: column;
+}
+
+.sidebarLink {
+	composes: text, text_type_main-medium, text_color_inactive;
+	composes: pt-4, pb-5;
+	text-decoration: none;
+	transition: color .3s;
+
+}
+
+.sidebarLink:hover {
+	color: #FFFFFF;
+}
+
+.sidebarLink.activated {
+	color: #FFFFFF;
+}

@@ -1,33 +1,11 @@
-@value paddings: "@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css";
+@value paddings: "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
 @value pl-5, pr-5 from paddings;
-
-:root {
-	--header-bg-color: #1C1C21;
-}
-
-html, body {
-  height: 100%;
-  overflow: hidden;
-}
 
 .wrapper {
 	composes: pl-5, pr-5;
 	display: flex;
-	justify-content: space-between;
 	width: 100%;
-	max-width: 1240px;
+	max-width: 1285px;
 	margin: 0 auto;
 	box-sizing: border-box;
-}
-
-.twoColumnGrid {
-	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	grid-gap: 40px;
-	width: 100%;
-}
-
-.burgerIngredients {
-	display: flex;
-	flex-direction: column;
 }

@@ -3,6 +3,16 @@ import { ingredientType } from "../../utils/types";
 import styles from "../ingredient-details/ingredient-details.module.css";
 
 const IngredientDetails = ({ ingredient }) => {
+	if (ingredient === null ) {
+		ingredient = {
+			name: 'Краторная булка N-200i',
+			image_large: 'https://code.s3.yandex.net/react/code/bun-02-large.png',
+			calories: '420',
+			proteins: '80',
+			fat: '24',
+			carbohydrates: '53'
+		}
+	}
 	const { name, image_large,  calories, proteins, fat, carbohydrates } = ingredient;
 
 	return (

@@ -12,20 +12,22 @@ const AppHeader = () => {
 		<header className={styles.header}>
 			<div className={styles.wrapper}>
 				<div className={styles.logo}>
-					<Logo />
+					<a href="/">
+						<Logo />
+					</a>
 				</div>
 				<nav className={styles.nav}>
 					<a href="/" className={`${styles.link} ${styles.linkActive}`}>
 						<BurgerIcon type="primary" />
-						<span className={styles.text}>Конструктор</span>
+						<span className={styles.navText}>Конструктор</span>
 					</a>
 					<a href="/" className={styles.link}>
 						<ListIcon type="secondary" />
-						<span className={styles.text}>Лента заказов</span>
+						<span className={styles.navText}>Лента заказов</span>
 					</a>
-					<a href="/" className={`${styles.link} ${styles.linkLast}`}>
+					<a href="/profile" className={`${styles.link} ${styles.linkLast}`}>
 						<ProfileIcon type="secondary" />
-						<span className={styles.text}>Личный кабинет</span>
+						<span className={styles.navText}>Личный кабинет</span>
 					</a>
 				</nav>
 			</div>

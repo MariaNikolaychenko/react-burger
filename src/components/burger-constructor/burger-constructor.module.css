@@ -1,7 +1,6 @@
-@value pl-4, ml-8, mt-4 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
+@value ml-8, mt-4 from "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
 
 .container {
-	composes: pl-4;
 	margin-top: 100px;
 	max-height: calc(100vh - 88px - 100px - 20px); /* viewportHeight - header - marginTop */
 }
