@@ -8,6 +8,7 @@ import { UserProfile } from './profile/user';
 import { Orders } from './profile/orders';
 import { ProfileLogout } from './profile/logout';
 import { IngredientPage } from './ingredients/ingredients';
+import { OrdersList } from './orders-list/orders-list';
 import { NotFound404 } from './404/404';
 
 export { 
@@ -21,5 +22,6 @@ export {
 	Orders,
 	ProfileLogout,
 	IngredientPage,
+	OrdersList,
 	NotFound404
 };

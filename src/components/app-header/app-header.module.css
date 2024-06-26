@@ -53,6 +53,7 @@ html, body {
 }
 
 .link svg {
+	fill: #8585AD;
 	transition: all .3s;
 }
 
@@ -70,6 +71,10 @@ html, body {
 
 .linkActive {
 	color: #F2F2F3;
+}
+
+.linkActive svg {
+	fill: #F2F2F3;
 }
 
 .navText {
