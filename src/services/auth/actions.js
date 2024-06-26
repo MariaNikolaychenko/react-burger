@@ -5,7 +5,8 @@ import {
 	refreshTokenApi,
 	getUserDataApi,
 	updateUserDataApi,
-	forgotPasswordApi
+	forgotPasswordApi,
+	resetPasswordApi
 } from "../../utils/api";
 import { setCookie, deleteCookie } from "../../utils/cookie";
 
@@ -29,8 +30,11 @@ export const UPDATE_USER_DATA_FAILED = 'UPDATE_USER_DATA_FAILED';
 export const REFRESH_TOKEN_SUCCESS = 'REFRESH_TOKEN_SUCCESS';
 export const REFRESH_TOKEN_FAILED = 'REFRESH_TOKEN_FAILED';
 
-export const FORGOT_PASSWORD = 'FORGOT_PASSWORD';
-export const FORGOT_FAILED = 'FORGOT_FAILED';
+export const FORGOT_PASSWORD_SUCCESS = 'FORGOT_PASSWORD_SUCCESS';
+export const FORGOT_PASSWORD_FAILED = 'FORGOT_PASSWORD_FAILED';
+
+export const RESET_PASSWORD_SUCCESS = 'RESET_PASSWORD_PASSWORD';
+export const RESET_PASSWORD_FAILED = 'RESET_PASSWORD_FAILED';
 
 export const registerAction = (data) => (dispatch) => {
 	dispatch({ type: REGISTER_LOADING });
@@ -174,18 +178,34 @@ export const updateUserDataAction = (data) => (dispatch) => {
 }
 
 export const forgotPasswordAction = (email) => (dispatch) => {
-	dispatch({ type: FORGOT_PASSWORD });
-
 	forgotPasswordApi(email)
 		.then(res => {
 			if (res && res.success) {
 				dispatch({
-					type: FORGOT_PASSWORD
+					type: FORGOT_PASSWORD_SUCCESS
 				})
 				
 			} else {
 				dispatch({
-					type: FORGOT_FAILED
+					type: FORGOT_PASSWORD_FAILED
+				});
+			}
+		})
+		.catch(console.error);
+}
+
+export const resetPasswordAction = (form) => (dispatch) => {
+
+	resetPasswordApi(form)
+		.then(res => {
+			if (res && res.success) {
+				dispatch({
+					type: RESET_PASSWORD_SUCCESS
+				})
+				
+			} else {
+				dispatch({
+					type: RESET_PASSWORD_FAILED
 				});
 			}
 		})

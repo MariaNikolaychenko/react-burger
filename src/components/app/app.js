@@ -15,48 +15,52 @@ import {
 	ProfileLogout,
 	NotFound404
 } from "../../pages";
+
 import { ProtectedRouteElement } from "../protected-route";
 
 import styles from "./app.module.css";
+import { ProvideAuth } from "../../services/authProvider";
 
 const App = () => {
 	return (
 		<>
 			<AppHeader />
-			<BrowserRouter>
-				<main>
-					<div className={styles.wrapper}>
-						<Routes>
-							{/* Home page */}
-							<Route path="/" element={<HomePage />} />
+			<ProvideAuth>
+				<BrowserRouter>
+					<main>
+						<div className={styles.wrapper}>
+							<Routes>
+								{/* Home page */}
+								<Route path="/" element={<HomePage />} />
 
-							{/* Login */}
-							<Route path='/login' element={<Login />} />
+								{/* Login */}
+								<Route path='/login' element={<Login />} />
 
-							{/* Register */}
-							<Route path='/register' element={<Register />} />
+								{/* Register */}
+								<Route path='/register' element={<Register />} />
 
-							{/* Forgot password */}
-							<Route path='/forgot-password' element={<ForgotPassword />} />
+								{/* Forgot password */}
+								<Route path='/forgot-password' element={<ForgotPassword />} />
 
-							{/* Reset password */}
-							<Route path='/reset-password' element={<ResetPassword />} />
+								{/* Reset password */}
+								<Route path='/reset-password' element={<ResetPassword />} />
 
-							{/* Ingredient Details Page */}
-							<Route path='ingredients/:id' element={<IngredientPage />} />
+								{/* Ingredient Details Page */}
+								<Route path='ingredients/:id' element={<IngredientPage />} />
 
-							{/* Profile */}
-							<Route path='/profile' element={<ProtectedRouteElement element={<Profile />} />} >
-								<Route index element={<UserProfile />} />
-								<Route path="orders" element={<Orders />} />
-								<Route path="logout" element={<ProfileLogout />} />
-							</Route>
+								{/* Profile */}
+								<Route path='/profile' element={<ProtectedRouteElement element={<Profile />} />} >
+									<Route index element={<UserProfile />} />
+									<Route path="orders" element={<Orders />} />
+									<Route path="logout" element={<ProfileLogout />} />
+								</Route>
 
-							<Route path="*" element={<NotFound404/>}/>
-						</Routes>
-					</div>
-				</main>
-			</BrowserRouter>
+								<Route path="*" element={<NotFound404/>}/>
+							</Routes>
+						</div>
+					</main>
+				</BrowserRouter>
+			</ProvideAuth>
 		</>
 	);
 };

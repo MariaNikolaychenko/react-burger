@@ -1,22 +1,24 @@
-import { useEffect } from 'react';
+import { useAuth } from '../services/authProvider';
 import { Navigate } from 'react-router-dom';
-import { useDispatch, useSelector } from "react-redux";
-import { getUserDataAction } from '../services/auth/actions';
-import { getAuthInfo } from '../services/auth/selectors';
-import Preloader from '../components/preloader/preloader';
+import { useEffect, useState } from 'react';
 
-export function ProtectedRouteElement({ element }) {
-	const dispatch = useDispatch();
-	const { isGetUserLoading, isGetUserFailed, name } = useSelector(getAuthInfo);
-	
-	useEffect(()=>{
-		dispatch(getUserDataAction())
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	},[]);
+export const ProtectedRouteElement = ({ element }) => {
+	let { getUser, ...auth } = useAuth();
+	const [isUserLoaded, setUserLoaded] = useState(false);
 
-	if (!isGetUserLoading && isGetUserFailed) {
-		return <Navigate to='/login' replace />
+	const init = async () => {
+		await getUser();
+		setUserLoaded(true);
+	};
+
+	useEffect(() => {
+		init();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	if (!isUserLoaded) {
+		return null;
 	}
 
-	return (isGetUserLoading || name === "") ? <Preloader /> : element;
+	return auth.user ? element : <Navigate to="/login" replace/>;
 }

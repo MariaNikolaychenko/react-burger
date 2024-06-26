@@ -1,35 +1,52 @@
-import React, { useState }  from "react";
-import { EmailInput, PasswordInput, Button } from "@ya.praktikum/react-developer-burger-ui-components";
-//import Preloader from '../../components/preloader/preloader';
+import { useEffect, useCallback, useState }  from "react";
+import { useAuth } from '../../services/authProvider';
+
+import { 
+	EmailInput, 
+	PasswordInput, 
+	Button 
+} from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, Navigate } from 'react-router-dom';
-import { useDispatch, useSelector } from "react-redux";
 
 import styles from '../index.module.css';
-import { loginAction } from "../../services/auth/actions";
-import { getAuthInfo } from "../../services/auth/selectors"
+import Preloader from "../../components/preloader/preloader";
+
 
 export const Login = () => {
-	const { isLoginSuccess, isLoginFailed } = useSelector(getAuthInfo);
-	const dispatch = useDispatch();
+	let auth = useAuth();
+
+	const [isUserLoaded, setUserLoaded] = useState(null);
+
+	const init = async () => {
+		await auth.getUser();
+		setUserLoaded(true);
+	};
+
+	useEffect(() => {
+		init();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	const [form, setValue] = useState({
 		email: '', 
-		password: '', 
-		name: ''
+		password: ''
 	});
-
-	const handleSubmit = (e) => {
-		e.preventDefault();
-		dispatch(
-		  loginAction(form)
-		);
-	};
 
 	const handleChange = e => {
 		setValue({ ...form, [e.target.name]: e.target.value });
 	};
 
-	if (isLoginSuccess) {
+	let handleSubmit = useCallback(
+		e => {
+			e.preventDefault();
+			auth.signIn(form);
+		},
+		[auth, form]
+	)
+	
+	if (isUserLoaded === null) return <Preloader />
+
+	if (auth.user) {
 		return (
 			<Navigate
 				to={'/'}
@@ -38,43 +55,41 @@ export const Login = () => {
 	}
 
 	return (
-		// {isLoading ? <Preloader /> : 
-			<form className={`${styles.positionCenter} ${styles.form}`} onSubmit={handleSubmit}>
-				<h1 className={styles.formTitle}>Вход</h1>
-				<EmailInput 
-					extraClass="mt-6" 
-					name="email" 
-					value={form.email}  
-					onChange={handleChange} 
-				/>
-				<PasswordInput 
-					extraClass="mt-6" 
-					name="password" 
-					value={form.password} 
-					onChange={handleChange}  
-				/>
-				<Button 
-					type="primary" 
-					extraClass="mt-6" 
-					htmlType="submit" 
-				>
-					Войти
-				</Button>
+		isUserLoaded ? 
+		<form className={`${styles.positionCenter} ${styles.form}`} onSubmit={handleSubmit}>
+			<h1 className={styles.formTitle}>Вход</h1>
+			<EmailInput 
+				extraClass="mt-6" 
+				name="email" 
+				value={form.email}  
+				onChange={handleChange} 
+			/>
+			<PasswordInput 
+				extraClass="mt-6" 
+				name="password" 
+				value={form.password} 
+				onChange={handleChange}  
+			/>
+			<Button 
+				type="primary" 
+				extraClass="mt-6" 
+				htmlType="submit" 
+			>
+				Войти
+			</Button>
 
-				{isLoginFailed && 
-					<p className={styles.error}>Ошибка</p>
-				}
+			{auth.error && 
+				<p className={styles.error}>{auth.error}</p>
+			}
 
-				<div className={styles.formFooter}>
-					<p className={styles.formFooterText}>Вы — новый пользователь? 
-						<Link to="/register" className={styles.formLink}>Зарегистрироваться</Link>
-					</p>
-					<p className={styles.formFooterText}>Забыли пароль?
-						<Link className={styles.formLink} to='/forgot-password'>Восстановить пароль</Link></p>
-				</div>
-
-			</form>
-
-		//}
+			<div className={styles.formFooter}>
+				<p className={styles.formFooterText}>Вы — новый пользователь? 
+					<Link to="/register" className={styles.formLink}>Зарегистрироваться</Link>
+				</p>
+				<p className={styles.formFooterText}>Забыли пароль?
+					<Link className={styles.formLink} to='/forgot-password'>Восстановить пароль</Link></p>
+			</div>
+		</form> :
+		<Navigate to={'/'} />
 	);
 };

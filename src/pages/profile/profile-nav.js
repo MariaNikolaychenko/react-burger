@@ -1,17 +1,10 @@
-import React from "react";
-
 import { NavLink, Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useAuth } from "../../services/authProvider";
 
-import styles from "./profile.module.css"
-import { logoutAction } from "../../services/auth/actions";
+import styles from "./profile.module.css";
 
 export const ProfileNav = () => {
-	const dispatch = useDispatch();
-
-	const handleLogout = () => {
-		dispatch(logoutAction());
-	}
+	const auth = useAuth();
 
 	return (
 		<nav className={styles.sidebar}>
@@ -31,8 +24,7 @@ export const ProfileNav = () => {
 			</NavLink>
 
 			<Link 
-				to="/login"
-				onClick={handleLogout}
+				onClick={() => auth.signOut()}
 				className={styles.sidebarLink}>
 				Выход
 			</Link>

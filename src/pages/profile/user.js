@@ -1,85 +1,70 @@
-import React, { useState, useEffect } from "react";
-import { Input, EmailInput, PasswordInput, Button } from "@ya.praktikum/react-developer-burger-ui-components";
-import Preloader from '../../components/preloader/preloader';
+import { useCallback, useState } from "react";
+import { useAuth } from '../../services/authProvider';
 
-import { useDispatch, useSelector } from "react-redux";
 import { 
-	getUserDataAction,
-	updateUserDataAction
-} from "../../services/auth/actions";
-import { getAuthInfo } from "../../services/auth/selectors"
+	Input, 
+	EmailInput, 
+	PasswordInput, 
+	Button 
+} from "@ya.praktikum/react-developer-burger-ui-components";
 
 import styles from '../index.module.css';
 
+
 export const UserProfile = () => {
+	const auth = useAuth();
+
 	const [ isDataChanged, setIsDataChanged ] = useState(false);
 	
-	const dispatch = useDispatch();
-	
-	const [userData, setUserData] = useState(
-		{
-			name: '',
-			email: '',
-			password: '',
-		}
-	)
+	const [form, setValue] = useState({
+		email: auth.user.email,
+		name: auth.user.name,
+		password: ''
+	});
 
-	const { name, email, isGetUserLoading } = useSelector(getAuthInfo);
-	
-	useEffect(() => {
-		setUserData(prevState => ({
-			...prevState,
-			name: name,
-			email: email
-		}))
-	}, [name, email])
-
-	const handleSubmit = (event) => {
-		event.preventDefault();
-		dispatch(updateUserDataAction(userData));
-	}
-	
-	const handleChange = (e) => {
+	const handleChange = e => {
 		setIsDataChanged(true);
-		const {name, value} = e.target;
-		setUserData(prevState => ({
-			...prevState, 
-			[name]: value
-		}));
-	}
+		setValue({ ...form, [e.target.name]: e.target.value });
+	};
+
+	let handleSubmit = useCallback(
+		e => {
+			e.preventDefault();
+			auth.updateUser(form);
+		},
+		[auth, form]
+	)
 	
 	const handleCancel = () => {
 		setIsDataChanged(false);
+		setValue({
+			email: auth.user.email,
+			name: auth.user.name,
+			password: ''
+		})
 	}
-	useEffect(()=>{
-		dispatch(getUserDataAction())
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	},[]);
-
-	if (isGetUserLoading || name === "") 
-		return <Preloader />;
 
     return (
 		<form onSubmit={handleSubmit} onReset={handleCancel}>
 			<Input 
 				name="name" 
 				placeholder="Имя" 
-				value={userData.name}
+				value={form.name}
 				onChange={handleChange} 
 				icon="EditIcon" 
 			/>
 			<EmailInput 
 				extraClass="mt-6" 
 				name="email" 
-				value={userData.email}
+				value={form.email}
 				onChange={handleChange} 
 				icon="EditIcon" 
 			/>
 			<PasswordInput 
 				extraClass="mt-6" 
 				placeholder="Новый пароль"
-				name="password" 
-				value={userData.password}
+				name="password"
+				value={form.password}
 				onChange={handleChange} 
 				icon="EditIcon" 
 			/>
@@ -92,8 +77,18 @@ export const UserProfile = () => {
 					>
 						Отмена
 					</Button>
-					<Button type="primary" extraClass="ml-5" htmlType='submit'>Сохранить</Button>
+					<Button 
+						type="primary" 
+						extraClass="ml-5" 
+						htmlType='submit'
+					>
+						Сохранить
+					</Button>
 				</div>
+			}
+
+			{auth.error && 
+				<p className={styles.error}>{auth.error}</p>
 			}
 		</form>
     )

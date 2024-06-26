@@ -8,8 +8,10 @@ import {
 	LOGOUT_FAILED,
 	REFRESH_TOKEN_SUCCESS,
 	REFRESH_TOKEN_FAILED,
-	FORGOT_PASSWORD,
-	FORGOT_FAILED,
+	FORGOT_PASSWORD_SUCCESS,
+	FORGOT_PASSWORD_FAILED,
+	RESET_PASSWORD_SUCCESS,
+	RESET_PASSWORD_FAILED,
 	GET_USER_DATA_LOADING,
 	GET_USER_DATA_SUCCESS,
 	GET_USER_DATA_FAILED,
@@ -41,11 +43,13 @@ const initialState = {
 	isUpdateUserFailed: null,
 
 	isForgotSuccess: false,
-	isForgotFailed: null
+	isForgotFailed: null,
+
+	isResetPasswordSuccess: false,
+	isResetPasswordFailed: null
 };
 
 export const reducer = ( state = initialState, action) => {
-	console.log(action);
 	switch (action.type) {
 		case REGISTER_LOADING:
 			return {
@@ -136,17 +140,29 @@ export const reducer = ( state = initialState, action) => {
 				isUpdateUserSuccess: false,
 				isUpdateUserFailed: true
 			};
-		case FORGOT_PASSWORD:
+		case FORGOT_PASSWORD_SUCCESS:
 			return {
 				...state,
 				isForgotSuccess: true,
 				isForgotFailed: false
 			};
-		case FORGOT_FAILED:
+		case FORGOT_PASSWORD_FAILED:
 			return {
 				...state,
 				isForgotSuccess: false,
 				isForgotFailed: true
+			}
+		case RESET_PASSWORD_SUCCESS:
+			return {
+				...state,
+				isResetPasswordSuccess: true,
+				isResetPasswordFailed: false
+			};
+		case RESET_PASSWORD_FAILED:
+			return {
+				...state,
+				isResetPasswordSuccess: false,
+				isResetPasswordFailed: true
 			}
 		default:
 			return state;

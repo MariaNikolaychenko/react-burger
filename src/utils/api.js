@@ -54,8 +54,8 @@ export const registerApi = async data  => {
 };
 
 // Логин
-export const loginApi = async data => {
-	return await request("auth/login", {
+export const loginApi = data => {
+	return request("auth/login", {
 		method: 'POST',
 		mode: 'cors',
 		cache: 'no-cache',
@@ -77,7 +77,7 @@ export const logoutApi = () => {
 			'Content-Type': 'application/json',
 		},
 		body: JSON.stringify({
-			token: localStorage.getItem('refreshToken')
+			"token": localStorage.getItem('refreshToken')
 		})
 	});
 };
@@ -108,12 +108,27 @@ export const forgotPasswordApi = (data) => {
 	});
 };
 
+// Восстановить пароль: отправка кода
+export const resetPasswordApi = (data) => {
+	console.log(data);
+	return request("password-reset/reset",  {
+		method: 'POST',
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({
+			"password": data.password,
+			"token": data.token,
+		})
+	});
+};
+
 // Получить данные о пользователе
 export const getUserDataApi = () => {
 	return request("auth/user", {
 		method: "GET",
 		headers: {
-			'Content-Type': 'application/json;charset=utf-8',
+			'Content-Type': 'application/json',
 			Authorization: "Bearer " + getCookie('token')
 		}
 	});
@@ -121,10 +136,11 @@ export const getUserDataApi = () => {
 
 // Обновить данные о пользователе
 export const updateUserDataApi = async user => {
+	console.log(user);
 	return await request("auth/user", {
 		method: "PATCH",
 		headers: {
-			'Content-Type': 'application/json;charset=utf-8',
+			'Content-Type': 'application/json',
 			Authorization: "Bearer " + getCookie('token')
 		},
 		body: JSON.stringify({

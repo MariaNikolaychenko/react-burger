@@ -14,20 +14,20 @@ export const ForgotPassword = () => {
 	const dispatch = useDispatch();
 	const { isForgotSuccess } = useSelector(getAuthInfo);
 
-	const [form, setValue] = useState(
-		{ email: '' }
-	);
+	const [form, setValue] = useState({ 
+		email: '' 
+	});
 	//const [isLoading, setIsLoading] = React.useState(true);
+
+	const handleChange = e => {
+		setValue({ ...form, [e.target.name]: e.target.value });
+	};
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		dispatch(
 			forgotPasswordAction(form.email)
 		);
-	};
-
-	const handleChange = e => {
-		setValue({ ...form, [e.target.name]: e.target.value });
 	};
 
 	// useEffect(() => {
