@@ -11,13 +11,18 @@ import { useNavigate } from 'react-router-dom';
 import styles from './modal.module.css';
 
 
-const Modal = ({ children, header }) => {
+const Modal = ({ children, header, onClose }) => {
 
 	const navigate = useNavigate();
 
 	function handleClose(e) {
 		e.stopPropagation();
-		navigate(-1);
+
+		if (onClose) {
+			onClose();
+		} else {
+			navigate(-1);
+		}
 	}
 
 	useEffect(() => {

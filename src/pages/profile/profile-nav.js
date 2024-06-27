@@ -1,11 +1,17 @@
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../services/authProvider";
 
 import styles from "./profile.module.css";
 
+
 export const ProfileNav = () => {
 	const auth = useAuth();
-
+	const navigate = useNavigate();
+	
+	const handleLogout = () => {
+		auth.signOut();
+		navigate('/login');
+	}
 	return (
 		<nav className={styles.sidebar}>
 			<NavLink 
@@ -23,11 +29,11 @@ export const ProfileNav = () => {
 				История заказов
 			</NavLink>
 
-			<Link 
-				onClick={() => auth.signOut()}
+			<div 
+				onClick={handleLogout}
 				className={styles.sidebarLink}>
 				Выход
-			</Link>
+			</div>
 
 			<div className="pt-20">
 				<span className="text text_type_main-default text_color_inactive">

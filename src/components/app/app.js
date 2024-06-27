@@ -2,6 +2,10 @@
 import AppHeader from "../app-header/app-header";
 
 import { Routes, Route, useLocation } from 'react-router-dom';
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+
+import { ProvideAuth } from "../../services/authProvider";
 import { 
 	HomePage,
 	Login,
@@ -12,23 +16,15 @@ import {
 	Profile,
 	UserProfile,
 	Orders,
-	ProfileLogout,
 	OrdersList,
 	NotFound404
 } from "../../pages";
-
+import IngredientDetails from "../ingredient-details/ingredient-details";
+import Modal from '../modal/modal';
+import { loadIngredients } from "../../services/burger-ingredients/actions";
 import { ProtectedRouteElement } from "../protected-route";
 
 import styles from "./app.module.css";
-import Modal from '../modal/modal';
-import { ProvideAuth } from "../../services/authProvider";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { loadIngredients } from "../../services/burger-ingredients/actions";
-import IngredientDetails from "../ingredient-details/ingredient-details";
-//import { DELETE_CURRENT_INGREDIENT, SET_CURRENT_INGREDIENT } from "../../services/ingredient/actions";
-
-
 
 const App = () => {
 	let location = useLocation();
@@ -69,7 +65,6 @@ const App = () => {
 						<Route path='/profile' element={<ProtectedRouteElement element={<Profile />} />} >
 							<Route index element={<UserProfile />} />
 							<Route path="orders" element={<Orders />} />
-							<Route path="logout" element={<ProfileLogout />} />
 						</Route>
 
 						{/* Orders List */}
@@ -79,7 +74,7 @@ const App = () => {
 					</Routes>
 
 					{/* Ingredient in Modal view  */}
-					{background && 
+					{background &&
 						<Routes>
 							<Route path="/ingredients/:id" element={
 								<Modal header="Детали ингредиента">

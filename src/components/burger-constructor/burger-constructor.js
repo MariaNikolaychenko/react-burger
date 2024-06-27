@@ -1,5 +1,7 @@
 import {v4 as uuidv4} from 'uuid';
 
+import { useAuth } from '../../services/authProvider';
+import { useNavigate } from 'react-router-dom';
 import { useMemo } from "react";
 import { useDrop } from "react-dnd";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,6 +16,7 @@ import Price from "../price/price";
 import ConstructorIngredients from '../constructor-ingredients/constructor-ingredients';
 import OrderDetails from '../order-details/order-details';
 import Modal from '../modal/modal';
+import Preloader from '../preloader/preloader';
 
 import { 
 	ADD_INGREDIENT,
@@ -27,9 +30,11 @@ import styles from "../burger-constructor/burger-constructor.module.css";
 
 const BurgerConstructor = () => {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const { user } = useAuth();
 
 	const { bun, fillings } = useSelector(getConstructorItems);
-	const { isOrderFailed, orderNumber } = useSelector(getOrderData);
+	const { isOrderLoading, isOrderFailed, orderNumber } = useSelector(getOrderData);
 
 	const { isModalOpen, openModal, closeModal } = useModal();
 
@@ -83,9 +88,13 @@ const BurgerConstructor = () => {
 	// Оформить заказ
 	const onClickOrderCheckout = () => {
 		if (bun && fillings.length !== 0) {
-			const order = [bun._id, ...fillings.map((item) => item._id), bun._id];
-			dispatch(createOrderAction(order));
-			openModal();
+			if (!user) {
+				navigate('/login');
+			} else {
+				const order = [bun._id, ...fillings.map((item) => item._id), bun._id];
+				dispatch(createOrderAction(order));
+				openModal();
+			}
 		}
 	}
 
@@ -159,11 +168,14 @@ const BurgerConstructor = () => {
 				</Button>
 			</div>
 
-			{isModalOpen && !isOrderFailed && orderNumber &&
+			{isOrderLoading && <Preloader /> }
+
+			{isModalOpen && !isOrderLoading && !isOrderFailed && orderNumber &&
 				<Modal onClose={closeModal}>
 					<OrderDetails orderNumber={orderNumber} />
 				</Modal>
 			}
+
 		</div>
 	)
 }

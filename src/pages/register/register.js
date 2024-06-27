@@ -1,14 +1,15 @@
 import { useEffect, useCallback, useState } from "react";
 import { useAuth } from '../../services/authProvider';
 import { Input, EmailInput, PasswordInput, Button } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link, Navigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import Preloader from "../../components/preloader/preloader";
 
 import styles from '../index.module.css';
-import Preloader from "../../components/preloader/preloader";
+
 
 export const Register = () => {
 	let auth = useAuth();
-
+	const navigate = useNavigate();
 	const [isUserLoaded, setUserLoaded] = useState(null);
 
 	const init = async () => {
@@ -39,18 +40,11 @@ export const Register = () => {
 		[auth, form]
 	)
 	
-	if (auth.user) {
-		return (
-			<Navigate
-				to={'/'}
-			/>
-		);
-	}
-	
 	if (isUserLoaded === null) return <Preloader />
 
 	return (
-		isUserLoaded ? 
+		auth.user ?
+		navigate('/', { replace: true }) :
 		<form className={`${styles.positionCenter} ${styles.form}`} onSubmit={handleSubmit}>
 			<h1 className={styles.formTitle}>Регистрация</h1>
 			<Input 
@@ -88,7 +82,6 @@ export const Register = () => {
 				<p className={styles.formFooterText}>Уже зарегистрированы? 
 					<Link className={styles.formLink} to='/login'>Войти</Link></p>
 			</div>
-		</form> :
-		<Navigate to={'/'} />
+		</form>
 	);
 };

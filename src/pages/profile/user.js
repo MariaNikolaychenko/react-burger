@@ -7,6 +7,7 @@ import {
 	PasswordInput, 
 	Button 
 } from "@ya.praktikum/react-developer-burger-ui-components";
+import Preloader from "../../components/preloader/preloader";
 
 import styles from '../index.module.css';
 
@@ -44,7 +45,7 @@ export const UserProfile = () => {
 		})
 	}
 
-    return (
+    return auth.user ?
 		<form onSubmit={handleSubmit} onReset={handleCancel}>
 			<Input 
 				name="name" 
@@ -69,9 +70,10 @@ export const UserProfile = () => {
 				icon="EditIcon" 
 			/>
 			{isDataChanged && 
-				<div className={styles.formFooter}>
+				<div className={`${styles.formFooter} ${styles.marginLeft150}`}>
 					<Button 
-						type="primary" 
+						type="secondary" 
+						size="medium"
 						htmlType='reset'
 						onClick={handleCancel}
 					>
@@ -90,6 +92,7 @@ export const UserProfile = () => {
 			{auth.error && 
 				<p className={styles.error}>{auth.error}</p>
 			}
-		</form>
-    )
+		</form> :
+		<Preloader />
+
 }

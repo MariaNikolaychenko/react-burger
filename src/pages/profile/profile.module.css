@@ -20,11 +20,11 @@
 	composes: pt-4, pb-5;
 	text-decoration: none;
 	transition: color .3s;
-
 }
 
 .sidebarLink:hover {
 	color: #FFFFFF;
+	cursor: pointer;
 }
 
 .sidebarLink.activated {

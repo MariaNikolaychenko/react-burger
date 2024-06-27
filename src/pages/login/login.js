@@ -6,22 +6,23 @@ import {
 	PasswordInput, 
 	Button 
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link, Navigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import Preloader from "../../components/preloader/preloader";
 
 import styles from '../index.module.css';
-import Preloader from "../../components/preloader/preloader";
 
 
 export const Login = () => {
+	
 	let auth = useAuth();
-
 	const [isUserLoaded, setUserLoaded] = useState(null);
-
+	const navigate = useNavigate();
+	
 	const init = async () => {
 		await auth.getUser();
 		setUserLoaded(true);
 	};
-
+	
 	useEffect(() => {
 		init();
 	// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -43,19 +44,12 @@ export const Login = () => {
 		},
 		[auth, form]
 	)
-	
+
 	if (isUserLoaded === null) return <Preloader />
 
-	if (auth.user) {
-		return (
-			<Navigate
-				to={'/'}
-			/>
-		);
-	}
-
 	return (
-		isUserLoaded ? 
+		auth.user ?
+		navigate('/', { replace: true }) :
 		<form className={`${styles.positionCenter} ${styles.form}`} onSubmit={handleSubmit}>
 			<h1 className={styles.formTitle}>Вход</h1>
 			<EmailInput 
@@ -89,7 +83,6 @@ export const Login = () => {
 				<p className={styles.formFooterText}>Забыли пароль?
 					<Link className={styles.formLink} to='/forgot-password'>Восстановить пароль</Link></p>
 			</div>
-		</form> :
-		<Navigate to={'/'} />
+		</form>
 	);
 };

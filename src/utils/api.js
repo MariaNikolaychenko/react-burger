@@ -35,6 +35,7 @@ export const createOrderApi = (data) => {
 		method: 'POST',
 		headers: {
 			"Content-Type": "application/json",
+			Authorization: "Bearer " + getCookie('token')
 		},
 		body: JSON.stringify({
 			"ingredients": data

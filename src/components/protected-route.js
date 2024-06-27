@@ -1,9 +1,13 @@
 import { useAuth } from '../services/authProvider';
-import { Navigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
+import Preloader from './preloader/preloader';
+import PropTypes from 'prop-types';
+
 
 export const ProtectedRouteElement = ({ element }) => {
 	let { getUser, ...auth } = useAuth();
+	const location = useLocation();
 	const [isUserLoaded, setUserLoaded] = useState(false);
 
 	const init = async () => {
@@ -17,8 +21,12 @@ export const ProtectedRouteElement = ({ element }) => {
 	}, []);
 
 	if (!isUserLoaded) {
-		return null;
+		return <Preloader />
 	}
 
-	return auth.user ? element : <Navigate to="/login" replace/>;
+	return auth.user ? element : <Navigate to="/login" replace state={{from: location.pathname}}/>;
+}
+
+ProtectedRouteElement.propTypes = {
+	element: PropTypes.element.isRequired
 }

@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Input, PasswordInput, Button } from "@ya.praktikum/react-developer-burger-ui-components";
-//import Preloader from '../../components/preloader/preloader';
 import { Link, Navigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { resetPasswordAction } from "../../services/auth/actions";
 import { getAuthInfo } from "../../services/auth/selectors";
 
 import styles from '../index.module.css';
+
 
 export const ResetPassword = () => {
 	const dispatch = useDispatch();
@@ -69,6 +69,6 @@ export const ResetPassword = () => {
 					</p>
 				</div>
 			</form> :
-			<Navigate to={'/'} />
+			<Navigate to={'/'} replace />
 	);
 };

@@ -1,11 +1,12 @@
 import {
-	NEW_ORDER_REQUEST,
+	NEW_ORDER_LOADING,
 	NEW_ORDER_SUCCESS,
 	NEW_ORDER_FAILED
 } from '../order/actions'
 
 const initialState = {
 	isOrderRequest: false,
+	isOrderLoading: false,
 	isOrderFailed: false,
 	orderName: '',
 	orderNumber: ''
@@ -13,17 +14,19 @@ const initialState = {
 
 export const reducer = (state = initialState, action) => {
 	switch (action.type) {
-		case NEW_ORDER_REQUEST: {
+		case NEW_ORDER_LOADING: {
 			return {
 				...state,
-				isOrderRequest: true,
+				isOrderLoading: true,
+				isOrderSuccess: false,
 				isOrderFailed: false,
 			}
 		}
 		case NEW_ORDER_SUCCESS: {
 			return {
 				...state,
-				isOrderRequest: false,
+				isOrderLoading: false,
+				isOrderSuccess: true,
 				isOrderFailed: false,
 				orderName: action.order.name,
 				orderNumber: action.order.order.number
@@ -32,7 +35,8 @@ export const reducer = (state = initialState, action) => {
 		case NEW_ORDER_FAILED: {
 			return {
 				...state,
-				isOrderRequest: false,
+				isOrderLoading: false,
+				isOrderSuccess: false,
 				isOrderFailed: true,
 			};
 		}

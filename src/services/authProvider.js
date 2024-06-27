@@ -1,6 +1,7 @@
 import { useContext, createContext, useState } from "react";
-import { getUserDataApi, loginApi, logoutApi, registerApi, updateUserDataApi } from "../utils/api";
-import { deleteCookie, setCookie } from "../utils/cookie";
+import { getUserDataApi, loginApi, logoutApi, refreshTokenApi, registerApi, updateUserDataApi } from "../utils/api";
+import { deleteCookie, getCookie, setCookie } from "../utils/cookie";
+import { isTokenExpired } from "../utils/token";
 
 const AuthContext = createContext(undefined);
 
@@ -18,6 +19,12 @@ export function useProvideAuth() {
 	const [error, setError] = useState(null);
 
 	const getUser = async () => {
+		const token = localStorage.getItem('refreshToken');
+		const isExpired = isTokenExpired(getCookie('token'));
+		if (token && isExpired) {
+			refreshNewToken();
+		}
+
 		return await getUserDataApi()
 			.then(res => {
 				if (res && res.success) {
@@ -88,6 +95,23 @@ export function useProvideAuth() {
 				}
 			});
 	}
+
+	const refreshNewToken = async () => {
+		return await refreshTokenApi()
+			.then(res => {
+				if (res && res.success) {
+					let authToken;
+					if (res.accessToken.startsWith("Bearer ")){
+						authToken = res.accessToken.split('Bearer ')[1];
+					}
+	
+					if (authToken) {
+						setCookie('token', authToken);
+						localStorage.setItem('refreshToken', res.refreshToken);
+					}
+				}
+			});
+	}
   
 	return {
 		user,
@@ -96,6 +120,7 @@ export function useProvideAuth() {
 		signOut,
 		register,
 		updateUser,
+		refreshNewToken,
 		error
 	};
 }

@@ -1,10 +1,9 @@
-import { ingredientType } from "../../utils/types";
+import { useSelector } from "react-redux";
+import { useParams } from 'react-router-dom';
+import { getIngredients } from '../../services/burger-ingredients/selectors';
 
 import styles from "../ingredient-details/ingredient-details.module.css";
 
-import { useSelector } from "react-redux";
-import { getIngredients } from '../../services/burger-ingredients/selectors';
-import { useParams } from 'react-router-dom';
 
 const IngredientDetails = () => {
 	let ingredient = null;
@@ -72,7 +71,3 @@ const IngredientDetails = () => {
 }
 
 export default IngredientDetails;
-
-IngredientDetails.propTypes = {
-	ingredient: ingredientType
-};

@@ -5,6 +5,7 @@ import {
 	useMemo
 } from "react";
 import { useSelector } from "react-redux";
+import { Link, useLocation } from "react-router-dom";
 
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import IngredientCard  from '../ingredient-card/ingredient-card';
@@ -12,13 +13,12 @@ import { getIngredients } from "../../services/burger-ingredients/selectors";
 import { getConstructorItems } from "../../services/burger-constructor/selectors";
 
 import styles from './burger-ingredients.module.css';
-import { Link, useLocation } from "react-router-dom";
 
 const BurgerIngredients = () => {
+	let location = useLocation();
 
 	const ingredients = useSelector(getIngredients);
 	const { bun, fillings } = useSelector(getConstructorItems);
-	//const { currentIngredient } = useSelector(getCurrentIngredient);;
 
 	const [current, setCurrent] = useState('buns');
 	
@@ -27,8 +27,6 @@ const BurgerIngredients = () => {
 	const saucesRef = useRef(null);
 	const fillingsRef = useRef(null);
 	
-	//const { openModal, closeModal } = useModal();
-
 	// Счётчик
 	const getCount = useMemo(() => {
 	    const count = {};
@@ -71,13 +69,6 @@ const BurgerIngredients = () => {
 		document.getElementById(`${current}`)?.scrollIntoView();
 	},[current])
 
-	// // Модальное окно
-	// function handleOpenModal(ingredient) {
-	// 	dispatch({type: SET_CURRENT_INGREDIENT, data: ingredient});
-	// 	openModal();
-	// }
-
-	let location = useLocation();
 
 	return (
 		<>
@@ -145,12 +136,6 @@ const BurgerIngredients = () => {
 					</div>
 				</div>
 			</div>
-
-			{/* {currentIngredient &&
-				<Modal header="Детали ингредиента">
-					<IngredientDetails ingredient={currentIngredient} />
-				</Modal>
-			} */}
 		</>
 	)
 }
