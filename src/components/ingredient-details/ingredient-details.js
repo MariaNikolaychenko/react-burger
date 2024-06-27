@@ -2,17 +2,25 @@ import { ingredientType } from "../../utils/types";
 
 import styles from "../ingredient-details/ingredient-details.module.css";
 
-const IngredientDetails = ({ ingredient }) => {
-	if (ingredient === null ) {
-		ingredient = {
-			name: 'Краторная булка N-200i',
-			image_large: 'https://code.s3.yandex.net/react/code/bun-02-large.png',
-			calories: '420',
-			proteins: '80',
-			fat: '24',
-			carbohydrates: '53'
-		}
+import { useSelector } from "react-redux";
+import { getIngredients } from '../../services/burger-ingredients/selectors';
+import { useParams } from 'react-router-dom';
+
+const IngredientDetails = () => {
+	let ingredient = null;
+	let { id } = useParams();
+	const ingredients = useSelector(getIngredients);
+
+	ingredient = id && (ingredients || []).find((item) => item._id === id);
+	
+	if (!ingredient) {
+		return (
+			<div className={`${styles.positionCenter} ${styles.marginTop130}`}>
+				<h2>Ингредиента с таким id не существует.</h2>
+			</div>
+		);
 	}
+
 	const { name, image_large,  calories, proteins, fat, carbohydrates } = ingredient;
 
 	return (

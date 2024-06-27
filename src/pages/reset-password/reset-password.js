@@ -11,12 +11,7 @@ import styles from '../index.module.css';
 export const ResetPassword = () => {
 	const dispatch = useDispatch();
 	const { isResetPasswordSuccess, isForgotSuccess } = useSelector(getAuthInfo);
-	const store = useSelector(getAuthInfo);
-
-	console.log('store');
-	console.log(store);
-
-	//const [isLoading, setIsLoading] = React.useState(true);
+	
 	const [form, setValue] = useState({ 
 		password: '',
 		token: ''

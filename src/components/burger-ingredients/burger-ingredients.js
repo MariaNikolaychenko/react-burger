@@ -4,27 +4,21 @@ import {
 	useEffect, 
 	useMemo
 } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useModal } from '../../hooks/useModal';
+import { useSelector } from "react-redux";
 
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import Modal from '../modal/modal';
 import IngredientCard  from '../ingredient-card/ingredient-card';
-import IngredientDetails from "../ingredient-details/ingredient-details";
-
-import { DELETE_CURRENT_INGREDIENT, SET_CURRENT_INGREDIENT } from "../../services/ingredient/actions";
-import { getIngredientsApi } from "../../services/burger-ingredients/selectors";
+import { getIngredients } from "../../services/burger-ingredients/selectors";
 import { getConstructorItems } from "../../services/burger-constructor/selectors";
-import { getCurrentIngredient } from "../../services/ingredient/selectors.js";
 
 import styles from './burger-ingredients.module.css';
+import { Link, useLocation } from "react-router-dom";
 
 const BurgerIngredients = () => {
-	const dispatch = useDispatch();
 
-	const ingredients = useSelector(getIngredientsApi);
+	const ingredients = useSelector(getIngredients);
 	const { bun, fillings } = useSelector(getConstructorItems);
-	const { currentIngredient } = useSelector(getCurrentIngredient);;
+	//const { currentIngredient } = useSelector(getCurrentIngredient);;
 
 	const [current, setCurrent] = useState('buns');
 	
@@ -33,7 +27,7 @@ const BurgerIngredients = () => {
 	const saucesRef = useRef(null);
 	const fillingsRef = useRef(null);
 	
-	const { openModal, closeModal } = useModal();
+	//const { openModal, closeModal } = useModal();
 
 	// Счётчик
 	const getCount = useMemo(() => {
@@ -77,16 +71,13 @@ const BurgerIngredients = () => {
 		document.getElementById(`${current}`)?.scrollIntoView();
 	},[current])
 
-	// Модальное окно
-	function handleOpenModal(ingredient) {
-		dispatch({type: SET_CURRENT_INGREDIENT, data: ingredient});
-		openModal();
-	}
+	// // Модальное окно
+	// function handleOpenModal(ingredient) {
+	// 	dispatch({type: SET_CURRENT_INGREDIENT, data: ingredient});
+	// 	openModal();
+	// }
 
-	function handleCloseModal(e) {
-		closeModal();
-		dispatch({type: DELETE_CURRENT_INGREDIENT});
-	}
+	let location = useLocation();
 
 	return (
 		<>
@@ -111,9 +102,13 @@ const BurgerIngredients = () => {
 					</p>
 					<div className={styles.cardList}>
 						{ingredients.filter(ingredient => ingredient.type === "bun").map((ingredient) => (
-								<div key={ingredient._id} onClick={()=>handleOpenModal(ingredient)}>
-									<IngredientCard data={ingredient} count={getCount[ingredient._id]}/>
-								</div>
+							<Link 
+								key={ingredient._id}
+								to={`/ingredients/${ingredient._id}`}
+								state={{background: location}}
+							>
+								<IngredientCard data={ingredient} count={getCount[ingredient._id]}/>
+							</Link>
 						))}
 					</div>
 				</div>
@@ -123,9 +118,13 @@ const BurgerIngredients = () => {
 					</p>
 					<div className={styles.cardList}>
 						{ingredients.filter(ingredient => ingredient.type === "sauce").map((ingredient) => (
-							<div key={ingredient._id} onClick={()=>handleOpenModal(ingredient)}>
+							<Link 
+								key={ingredient._id}
+								to={`/ingredients/${ingredient._id}`}
+								state={{background: location}}
+							>
 								<IngredientCard data={ingredient} count={getCount[ingredient._id]} />
-							</div>
+							</Link>
 						))}
 					</div>
 				</div>
@@ -135,19 +134,23 @@ const BurgerIngredients = () => {
 					</p>
 					<div className={styles.cardList}>
 						{ingredients.filter(ingredient => ingredient.type === "main").map((ingredient) => (
-							<div key={ingredient._id} onClick={()=>handleOpenModal(ingredient)}>
+							<Link 
+								key={ingredient._id}
+								to={`/ingredients/${ingredient._id}`}
+								state={{background: location}}
+							>
 								<IngredientCard data={ingredient} count={getCount[ingredient._id]} />
-							</div>
+							</Link>
 						))}
 					</div>
 				</div>
 			</div>
 
-			{currentIngredient &&
-				<Modal header="Детали ингредиента" onClose={handleCloseModal}>
+			{/* {currentIngredient &&
+				<Modal header="Детали ингредиента">
 					<IngredientDetails ingredient={currentIngredient} />
 				</Modal>
-			}
+			} */}
 		</>
 	)
 }

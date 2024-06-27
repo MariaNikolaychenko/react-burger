@@ -6,16 +6,24 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import ModalOverlay from '../modal-overlay/modal-overlay';
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 
 import styles from './modal.module.css';
 
 
-const Modal = ({ children, header, onClose }) => {
+const Modal = ({ children, header }) => {
+
+	const navigate = useNavigate();
+
+	function handleClose(e) {
+		e.stopPropagation();
+		navigate(-1);
+	}
 
 	useEffect(() => {
 		function handleCloseModal(evt) {
 			if (evt.key === "Escape") {
-				onClose();
+				handleClose();
 			}
 		}
 
@@ -30,7 +38,7 @@ const Modal = ({ children, header, onClose }) => {
 	return ReactDOM.createPortal(
 		(
 			<>
-				<ModalOverlay onClose={onClose}/>
+				<ModalOverlay onClose={handleClose}/>
 				<div className={styles.modal}>
 					<div className={styles.dialog}>
 						<Button
@@ -38,7 +46,7 @@ const Modal = ({ children, header, onClose }) => {
 							htmlType="button"
 							type="secondary"
 							size="medium"
-							onClick={onClose}
+							onClick={handleClose}
 						>
 							<CloseIcon type="primary" />
 						</Button>

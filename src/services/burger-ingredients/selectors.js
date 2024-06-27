@@ -1,1 +1,1 @@
-export const getIngredientsApi = state => state.ingredients.ingredients.data;
+export const getIngredients = state => state.ingredients.ingredients.data;

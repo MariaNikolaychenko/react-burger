@@ -110,7 +110,6 @@ export const forgotPasswordApi = (data) => {
 
 // Восстановить пароль: отправка кода
 export const resetPasswordApi = (data) => {
-	console.log(data);
 	return request("password-reset/reset",  {
 		method: 'POST',
 		headers: {
@@ -136,7 +135,6 @@ export const getUserDataApi = () => {
 
 // Обновить данные о пользователе
 export const updateUserDataApi = async user => {
-	console.log(user);
 	return await request("auth/user", {
 		method: "PATCH",
 		headers: {
