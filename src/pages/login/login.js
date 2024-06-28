@@ -14,42 +14,43 @@ import styles from '../index.module.css';
 
 export const Login = () => {
 	
-	let auth = useAuth();
-	const [isUserLoaded, setUserLoaded] = useState(null);
+	const auth = useAuth();
 	const navigate = useNavigate();
 	
-	const init = async () => {
-		await auth.getUser();
-		setUserLoaded(true);
-	};
-	
-	useEffect(() => {
-		init();
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
-
 	const [form, setValue] = useState({
 		email: '', 
 		password: ''
 	});
-
+	
 	const handleChange = e => {
 		setValue({ ...form, [e.target.name]: e.target.value });
 	};
-
-	let handleSubmit = useCallback(
+	
+	const handleSubmit = useCallback(
 		e => {
 			e.preventDefault();
 			auth.signIn(form);
 		},
 		[auth, form]
 	)
-
-	if (isUserLoaded === null) return <Preloader />
-
+	
+	useEffect(() => {
+		if (auth.user) navigate('/', { replace: true });
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [auth]);
+	
+	const init = () => {
+		auth.getUser();
+	};
+	
+	useEffect(() => {
+		init();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+	
+	if (auth.loading) return <Preloader />
+	
 	return (
-		auth.user ?
-		navigate('/', { replace: true }) :
 		<form className={`${styles.positionCenter} ${styles.form}`} onSubmit={handleSubmit}>
 			<h1 className={styles.formTitle}>Вход</h1>
 			<EmailInput 
@@ -71,10 +72,6 @@ export const Login = () => {
 			>
 				Войти
 			</Button>
-
-			{auth.error && 
-				<p className={styles.error}>{auth.error}</p>
-			}
 
 			<div className={styles.formFooter}>
 				<p className={styles.formFooterText}>Вы — новый пользователь? 

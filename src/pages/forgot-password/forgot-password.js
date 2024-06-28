@@ -2,30 +2,18 @@ import { EmailInput, Button } from "@ya.praktikum/react-developer-burger-ui-comp
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-
-import { forgotPasswordAction } from "../../services/auth/actions";
 import { useAuth } from "../../services/authProvider";
 
-import styles from '../index.module.css';
+import { forgotPasswordAction } from "../../services/auth/actions";
 import Preloader from "../../components/preloader/preloader";
+
+import styles from '../index.module.css';
 
 export const ForgotPassword = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	let auth = useAuth();
-
-	const [isUserLoaded, setUserLoaded] = useState(null);
-
-	const init = async () => {
-		await auth.getUser();
-		setUserLoaded(true);
-	};
-
-	useEffect(() => {
-		init();
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	const auth = useAuth();
 
 	const [form, setValue] = useState({ 
 		email: '' 
@@ -42,11 +30,24 @@ export const ForgotPassword = () => {
 		);
 	};
 
-	if (isUserLoaded === null) return <Preloader />
+		
+	useEffect(() => {
+		if (auth.user) navigate(-1, { replace: true });
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [auth]);
+	
+	const init = () => {
+		auth.getUser();
+	};
+	
+	useEffect(() => {
+		init();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+	
+	if (auth.loading) return <Preloader />
 
 	return (
-		auth.user ?
-		navigate(-1, { replace: true }) :
 		<form className={`${styles.positionCenter} ${styles.form}`} onSubmit={handleSubmit}>
 			<h1 className={styles.formTitle}>Восстановление пароля</h1>
 			<EmailInput 

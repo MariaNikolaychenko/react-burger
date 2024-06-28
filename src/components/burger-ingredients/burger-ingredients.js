@@ -15,7 +15,7 @@ import { getConstructorItems } from "../../services/burger-constructor/selectors
 import styles from './burger-ingredients.module.css';
 
 const BurgerIngredients = () => {
-	let location = useLocation();
+	const location = useLocation();
 
 	const ingredients = useSelector(getIngredients);
 	const { bun, fillings } = useSelector(getConstructorItems);

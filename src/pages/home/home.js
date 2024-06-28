@@ -9,6 +9,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
 
 import styles from './home.module.css';
+import Preloader from "../../components/preloader/preloader";
 
 export const HomePage = () => {
 	const dispatch = useDispatch();
@@ -20,7 +21,7 @@ export const HomePage = () => {
 	}, [])
 
 	if (loading) {
-		return <h2>Загрузка...</h2>
+		return <Preloader />
 	}
   
 	if (!loading && error) {

@@ -6,14 +6,14 @@ import PropTypes from 'prop-types';
 
 
 export const ProtectedRouteElement = ({ element }) => {
-	let { getUser, ...auth } = useAuth();
+	const auth = useAuth();
 	const location = useLocation();
 	const [isUserLoaded, setUserLoaded] = useState(false);
 
-	const init = async () => {
-		await getUser();
+	const init = () => {
+		auth.getUser();
 		setUserLoaded(true);
-	};
+	}
 
 	useEffect(() => {
 		init();

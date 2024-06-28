@@ -28,7 +28,7 @@ export const UserProfile = () => {
 		setValue({ ...form, [e.target.name]: e.target.value });
 	};
 
-	let handleSubmit = useCallback(
+	const handleSubmit = useCallback(
 		e => {
 			e.preventDefault();
 			auth.updateUser(form);
@@ -45,7 +45,8 @@ export const UserProfile = () => {
 		})
 	}
 
-    return auth.user ?
+    return (
+		auth.user ?
 		<form onSubmit={handleSubmit} onReset={handleCancel}>
 			<Input 
 				name="name" 
@@ -88,11 +89,7 @@ export const UserProfile = () => {
 					</Button>
 				</div>
 			}
-
-			{auth.error && 
-				<p className={styles.error}>{auth.error}</p>
-			}
 		</form> :
 		<Preloader />
-
+	)
 }

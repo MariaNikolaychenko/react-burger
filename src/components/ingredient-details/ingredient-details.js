@@ -7,7 +7,7 @@ import styles from "../ingredient-details/ingredient-details.module.css";
 
 const IngredientDetails = () => {
 	let ingredient = null;
-	let { id } = useParams();
+	const { id } = useParams();
 	const ingredients = useSelector(getIngredients);
 
 	ingredient = id && (ingredients || []).find((item) => item._id === id);

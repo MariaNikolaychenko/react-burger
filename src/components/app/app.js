@@ -27,10 +27,10 @@ import { ProtectedRouteElement } from "../protected-route";
 import styles from "./app.module.css";
 
 const App = () => {
-	let location = useLocation();
+	const location = useLocation();
 	const dispatch = useDispatch();
 
-	let background = location.state && location.state.background;
+	const background = location.state && location.state.background;
 
 	useEffect(() => {
 		dispatch(loadIngredients());

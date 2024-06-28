@@ -23,7 +23,6 @@ const request = (endpoint, options) => {
 	return fetch(`${BASE_URL}${endpoint}`, options)
 		.then(checkResponse)
 		.then(checkSuccess)
-		.catch(console.error)
 };
 
 // Получить все ингредиенты

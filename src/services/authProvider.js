@@ -17,8 +17,10 @@ export function useAuth() {
 export function useProvideAuth() {
 	const [user, setUser] = useState(null);
 	const [error, setError] = useState(null);
+	const [loading, setLoading] = useState(null);
 
 	const getUser = async () => {
+		setLoading(true);
 		const token = localStorage.getItem('refreshToken');
 		const isExpired = isTokenExpired(getCookie('token'));
 		if (token && isExpired) {
@@ -27,9 +29,14 @@ export function useProvideAuth() {
 
 		return await getUserDataApi()
 			.then(res => {
-				if (res && res.success) {
+				if (res.success) {
 					setUser(res.user);
 				}
+				setLoading(false);
+			})
+			.catch(err => {
+				setError(err);
+				setLoading(false);
 			});
 	};
   
@@ -37,12 +44,9 @@ export function useProvideAuth() {
 		return await loginApi(form)
 			.then(res => {
 				if (res && res.success) {
-					let authToken;
 					if (res.accessToken.startsWith("Bearer ")){
-						authToken = res.accessToken.split('Bearer ')[1];
-					}
-	
-					if (authToken) {
+						const authToken = res.accessToken.split('Bearer ')[1];
+
 						setCookie('token', authToken);
 						localStorage.setItem('refreshToken', res.refreshToken);
 					}
@@ -69,12 +73,9 @@ export function useProvideAuth() {
 		return await registerApi(form)
 		  .then(res => {
 				if (res && res.success) {
-					let authToken;
 					if (res.accessToken.startsWith("Bearer ")){
-						authToken = res.accessToken.split('Bearer ')[1];
-					}
-
-					if (authToken) {
+						const authToken = res.accessToken.split('Bearer ')[1];
+						
 						setCookie('token', authToken);
 						localStorage.setItem('refreshToken', res.refreshToken);
 					}
@@ -100,12 +101,9 @@ export function useProvideAuth() {
 		return await refreshTokenApi()
 			.then(res => {
 				if (res && res.success) {
-					let authToken;
 					if (res.accessToken.startsWith("Bearer ")){
-						authToken = res.accessToken.split('Bearer ')[1];
-					}
-	
-					if (authToken) {
+						const authToken = res.accessToken.split('Bearer ')[1];
+						
 						setCookie('token', authToken);
 						localStorage.setItem('refreshToken', res.refreshToken);
 					}
@@ -121,6 +119,7 @@ export function useProvideAuth() {
 		register,
 		updateUser,
 		refreshNewToken,
-		error
+		error,
+		loading
 	};
 }
