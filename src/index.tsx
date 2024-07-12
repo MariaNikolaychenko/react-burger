@@ -5,17 +5,11 @@ import App from './components/app/app';
 import reportWebVitals from './reportWebVitals';
 
 import { Provider } from "react-redux";
-import { configureStore } from './services/store';
+import { store } from './services/store';
 import { BrowserRouter } from 'react-router-dom';
 
-const store = configureStore({
-	ingredients: {
-		ingredients: []
-	}
-});
-
 const root = ReactDOM.createRoot(
-  	document.getElementById('root') as HTMLElement
+  	document.getElementById('root')!
 );
 root.render(
 	<React.StrictMode>

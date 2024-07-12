@@ -1,1 +1,0 @@
-export const getOrderData = state => state.orderData;
