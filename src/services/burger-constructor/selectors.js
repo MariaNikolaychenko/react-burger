@@ -1,1 +1,0 @@
-export const getConstructorItems = state => state.burgerConstructor;
