@@ -10,7 +10,7 @@ import { DndProvider } from "react-dnd";
 
 import styles from './home.module.css';
 import Preloader from "../../components/preloader/preloader";
-import { RootState } from "../../services/store";
+import { RootState } from "../../services/types";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 
 

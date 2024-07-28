@@ -1,36 +1,50 @@
+// import { TIngredient } from "../../utils/types";
 import { TIngredient } from "../../utils/types";
-import { CLEAR_CONSTRUCTOR, NEW_ORDER_FAILED, NEW_ORDER_LOADING, NEW_ORDER_SUCCESS } from "./actions";
+import { CLEAR_CONSTRUCTOR, NEW_ORDER_FAILED, NEW_ORDER_LOADING, NEW_ORDER_SUCCESS } from "../constants";
+
+export type TOrder = {
+    ingredients: Array<TIngredient>;
+    _id: string;
+    status: string;
+    name: string;
+    number: number;
+	price: number;
+    createdAt: string;
+    updatedAt: string;
+	owner?: {
+		createdAt: string;
+		updatedAt: string;
+		email: string;
+		name: string;
+	}
+}
 
 export type TOrderState = {
-	isOrderRequest: boolean,
+	isOrderSuccess: boolean,
 	isOrderLoading: boolean,
 	isOrderFailed: boolean,
-	orderName: string | null,
-	orderNumber: number | null
+	order: TOrder | null
 }
 
 export interface INewOrderLoadingAction {
-	type: typeof NEW_ORDER_LOADING;
-	data: TIngredient
+	order: any;
+	readonly type: typeof NEW_ORDER_LOADING
 };
 
 export interface INewOrderSuccessAction {
-	type: typeof NEW_ORDER_SUCCESS;
+	readonly type: typeof NEW_ORDER_SUCCESS;
 	order: {
-		name: string;
-		order: {
-			number: number;
-		}
+		name: any;
+		number: any;
 	}
 };
 
 export interface INewOrderFailedAction {
-	type: typeof NEW_ORDER_FAILED;
-	data: TIngredient
+	readonly type: typeof NEW_ORDER_FAILED;
 };
 
 export interface IClearConstructorAction {
-	type: typeof CLEAR_CONSTRUCTOR;
+	readonly type: typeof CLEAR_CONSTRUCTOR;
 };
 
 export type TOrderActions = 

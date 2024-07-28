@@ -1,8 +1,7 @@
 import {v4 as uuidv4} from 'uuid';
 
-import { useAuth } from '../../services/authProvider';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useDrop } from "react-dnd";
 import { useSelector } from "react-redux";
 import { useModal } from '../../hooks/useModal';
@@ -22,7 +21,7 @@ import Preloader from '../preloader/preloader';
 import { 
 	ADD_INGREDIENT,
 	ADD_INGREDIENT_BUN
-} from "../../services/burger-constructor/actions";
+} from "../../services/constants";
 import { createOrderAction } from '../../services/order/actions';
 import { getConstructorItems } from '../../services/burger-constructor/selectors';
 import { getOrderData } from '../../services/order/selectors'
@@ -30,16 +29,17 @@ import { getOrderData } from '../../services/order/selectors'
 import { TResponseIngredients } from '../../utils/types';
 
 import styles from "../burger-constructor/burger-constructor.module.css";
+import { getAuthInfo } from '../../services/auth/selectors';
 
 
 const BurgerConstructor = () => {
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
 	
-	const auth = useAuth();
+	const { name } = useSelector(getAuthInfo);
 
 	const { bun, fillings } = useSelector(getConstructorItems);
-	const { isOrderLoading, isOrderFailed, orderNumber } = useSelector(getOrderData);
+	const { isOrderLoading, isOrderSuccess, order } = useSelector(getOrderData);
 
 	const { isModalOpen, openModal, closeModal } = useModal();
 
@@ -99,7 +99,7 @@ const BurgerConstructor = () => {
 	// Оформить заказ
 	const onClickOrderCheckout = () => {
 		if (bun && fillings.length !== 0) {
-			if (!auth.user) {
+			if (!name) {
 				navigate('/login');
 			} else {
 				const order = [bun._id, ...fillings.map((item: { _id: string; }) => item._id), bun._id];
@@ -108,15 +108,6 @@ const BurgerConstructor = () => {
 			}
 		}
 	}
-
-	const init = () => {
-		auth.getUser();
-	};
-	
-	useEffect(() => {
-		init();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
 
 	return (
 		<div className={styles.container}>
@@ -190,9 +181,9 @@ const BurgerConstructor = () => {
 
 			{isOrderLoading && <Preloader /> }
 
-			{isModalOpen && !isOrderLoading && !isOrderFailed && orderNumber &&
+			{isModalOpen && !isOrderLoading && isOrderSuccess &&
 				<Modal onClose={closeModal}>
-					<OrderDetails orderNumber={orderNumber} />
+					<OrderDetails orderNumber={order?.number} />
 				</Modal>
 			}
 

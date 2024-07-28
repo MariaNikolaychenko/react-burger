@@ -1,6 +1,5 @@
-import { ADD_INGREDIENT, ADD_INGREDIENT_BUN, DELETE_INGREDIENT, SORT_INGREDIENTS } from './actions'
-import { CLEAR_CONSTRUCTOR } from '../order/actions'
-import { TConstructorIngredient, TIngredient } from '../../utils/types'
+import { ADD_INGREDIENT, ADD_INGREDIENT_BUN, DELETE_INGREDIENT, SORT_INGREDIENTS, CLEAR_CONSTRUCTOR } from '../constants';
+import { TConstructorIngredient, TIngredient } from '../../utils/types';
 
 export type TBurgerConstructorState = {
 	bun: TIngredient | null,
@@ -8,29 +7,29 @@ export type TBurgerConstructorState = {
 }
 
 export interface IAddIngredientBunAction {
-	data: TIngredient;
-	type: typeof ADD_INGREDIENT_BUN;
+	readonly data: TIngredient;
+	readonly type: typeof ADD_INGREDIENT_BUN;
 };
 
 export interface IAddIngredientAction {
-	type: typeof ADD_INGREDIENT;
-	data: TIngredient;
+	readonly type: typeof ADD_INGREDIENT;
+	readonly data: TIngredient;
 };
 
 export interface IDeleteIngredientAction {
-	id: string | number;
-	type: typeof DELETE_INGREDIENT;
+	readonly id: string | number;
+	readonly type: typeof DELETE_INGREDIENT;
 };
 
 export interface ISortIngredientAction {
-	type: typeof SORT_INGREDIENTS;
-	hoverIndex: number;
-	dragIndex: number;
+	readonly type: typeof SORT_INGREDIENTS;
+	readonly hoverIndex: number;
+	readonly dragIndex: number;
 };
 
 export interface IClearConstructorAction {
-	type: typeof CLEAR_CONSTRUCTOR;
-	bun: TIngredient;
+	readonly type: typeof CLEAR_CONSTRUCTOR;
+	readonly bun: TIngredient;
 };
 
 export type TBurgerConstructorActions = 

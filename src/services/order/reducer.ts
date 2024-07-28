@@ -2,13 +2,14 @@ import {
 	NEW_ORDER_LOADING,
 	NEW_ORDER_SUCCESS,
 	NEW_ORDER_FAILED
-} from './actions'
+} from '../constants'
 import { TOrderActions, TOrderState } from './types';
 
 const initialState = {
-	isOrderRequest: false,
 	isOrderLoading: false,
+	isOrderSuccess: false,
 	isOrderFailed: false,
+	order: null,
 	orderName: '',
 	orderNumber: null
 };
@@ -29,8 +30,9 @@ export const reducer = (state: TOrderState = initialState, action: TOrderActions
 				isOrderLoading: false,
 				isOrderSuccess: true,
 				isOrderFailed: false,
-				orderName: action.order.name,
-				orderNumber: action.order.order.number
+				order: action.order
+				// orderName: action.order.name,
+				// orderNumber: action.order.number
 			};
 		}
 		case NEW_ORDER_FAILED: {

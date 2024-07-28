@@ -1,5 +1,4 @@
-import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
-import { useAuth } from '../../services/authProvider';
+import { ChangeEvent, FormEvent, useCallback, useState } from "react";
 
 import { 
 	Input, 
@@ -7,18 +6,23 @@ import {
 	PasswordInput, 
 	Button 
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import Preloader from "../../components/preloader/preloader";
 
+import profileStyles from './profile.module.css';
 import styles from '../index.module.css';
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { useSelector } from "react-redux";
+import { getAuthInfo } from "../../services/auth/selectors";
+import { updateUserDataAction } from "../../services/auth/actions";
 
 export const UserProfile = (): React.JSX.Element => {
-	const auth = useAuth();
+	const { name, email } = useSelector(getAuthInfo);
+	const dispatch = useAppDispatch();
 
 	const [ isDataChanged, setIsDataChanged ] = useState(false);
 
 	const [form, setValue] = useState({
-		email: auth.user!.email,
-		name: auth.user!.name,
+		email: email,
+		name: name,
 		password: ''
 	});
 
@@ -30,78 +34,64 @@ export const UserProfile = (): React.JSX.Element => {
 	const handleSubmit = useCallback(
 		(e: FormEvent<HTMLFormElement>) => {
 			e.preventDefault();
-			auth.updateUser(form);
+			dispatch(updateUserDataAction(form));
 		},
-		[auth, form]
+		[dispatch, form]
 	)
 	
 	const handleCancel = () => {
 		setIsDataChanged(false);
 		setValue({
-			email: auth.user!.email,
-			name: auth.user!.name,
+			email: email,
+			name: name,
 			password: ''
 		})
 	}
-	const init = () => {
-		auth.getUser();
-	};
-	
-	useEffect(() => {
-		init();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
 	
     return (
-		<>
-		{
-			auth.user ?
-			<form onSubmit={handleSubmit} onReset={handleCancel}>
-				<Input 
-					name="name"
-					placeholder="Имя"
-					value={form.name!}
-					onChange={handleChange}
-					icon="EditIcon"
-					onPointerEnterCapture={undefined}
-					onPointerLeaveCapture={undefined}
-				/>
-				<EmailInput 
-					extraClass="mt-6" 
-					name="email" 
-					value={form.email!}
-					onChange={handleChange}
-				/>
-				<PasswordInput 
-					extraClass="mt-6" 
-					placeholder="Новый пароль"
-					name="password"
-					value={form.password}
-					onChange={handleChange} 
-					icon="EditIcon" 
-				/>
-				{isDataChanged && 
-					<div className={`${styles.formFooter} ${styles.marginLeft150}`}>
-						<Button 
-							type="secondary" 
-							size="medium"
-							htmlType='reset'
-							onClick={handleCancel}
-						>
-							Отмена
-						</Button>
-						<Button 
-							type="primary" 
-							extraClass="ml-5" 
-							htmlType='submit'
-						>
-							Сохранить
-						</Button>
-					</div>
-				}
-			</form> :
-			<Preloader />
-		}
-		</>
+		<form className={profileStyles.userInfo} onSubmit={handleSubmit} onReset={handleCancel}>
+			<Input 
+				name="name"
+				placeholder="Имя"
+				value={form.name!}
+				onChange={handleChange}
+				icon="EditIcon"
+				onPointerEnterCapture={undefined}
+				onPointerLeaveCapture={undefined}
+			/>
+			<EmailInput 
+				extraClass="mt-6" 
+				name="email" 
+				value={form.email!}
+				onChange={handleChange}
+			/>
+			<PasswordInput 
+				extraClass="mt-6" 
+				placeholder="Новый пароль"
+				name="password"
+				value={form.password}
+				onChange={handleChange} 
+				icon="EditIcon" 
+			/>
+			{isDataChanged && 
+				<div className={`${styles.formFooter} ${styles.marginLeft150}`}>
+					<Button 
+						type="secondary" 
+						size="medium"
+						htmlType='reset'
+						onClick={handleCancel}
+					>
+						Отмена
+					</Button>
+					<Button 
+						type="primary" 
+						extraClass="ml-5" 
+						htmlType='submit'
+					>
+						Сохранить
+					</Button>
+				</div>
+			}
+		</form>
 	)
 }

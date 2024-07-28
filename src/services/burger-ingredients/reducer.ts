@@ -2,7 +2,7 @@ import {
 	INGREDIENTS_LOADING, 
 	INGREDIENTS_LOAD_SUCCESS, 
 	INGREDIENTS_ERROR 
-} from "./actions";
+} from "../constants";
 
 import { TIngredientsAction, TIngredientState } from "./types";
 

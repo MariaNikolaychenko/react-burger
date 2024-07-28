@@ -1,10 +1,7 @@
 import { createOrderApi } from "../../utils/api";
-import { AppDispatch } from "../store";
+import { CLEAR_CONSTRUCTOR, NEW_ORDER_FAILED, NEW_ORDER_LOADING, NEW_ORDER_SUCCESS } from "../constants";
+import { AppDispatch } from "../types";
 
-export const NEW_ORDER_LOADING = 'NEW_ORDER_LOADING';
-export const NEW_ORDER_SUCCESS = 'NEW_ORDER_SUCCESS';
-export const NEW_ORDER_FAILED = 'NEW_ORDER_FAILED';
-export const CLEAR_CONSTRUCTOR = 'CLEAR_CONSTRUCTOR';
 
 export const createOrderAction = (order: string[]) => (dispatch: AppDispatch) => {
 	dispatch({ type: NEW_ORDER_LOADING });
@@ -15,7 +12,8 @@ export const createOrderAction = (order: string[]) => (dispatch: AppDispatch) =>
 			if (res && res.success) {
 				dispatch({
 					type: NEW_ORDER_SUCCESS,
-					order: res
+					// @ts-ignore
+					order: res.order
 				});
 				dispatch({
 					type: CLEAR_CONSTRUCTOR

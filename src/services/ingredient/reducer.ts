@@ -1,7 +1,7 @@
 import {
 	SET_CURRENT_INGREDIENT,
 	DELETE_CURRENT_INGREDIENT
-  } from './actions'
+  } from '../constants'
 import { TCurrentIngredientActions, TCurrentIngredientState } from './types';
 
 

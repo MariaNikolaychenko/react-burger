@@ -1,9 +1,6 @@
 import { getIngredientsApi } from "../../utils/api";
-import { AppDispatch } from "../store";
-
-export const INGREDIENTS_LOADING = 'INGREDIENTS_LOADING';
-export const INGREDIENTS_LOAD_SUCCESS = 'INGREDIENTS_LOAD_SUCCESS';
-export const INGREDIENTS_ERROR = 'INGREDIENTS_ERROR';
+import { INGREDIENTS_ERROR, INGREDIENTS_LOAD_SUCCESS, INGREDIENTS_LOADING } from "../constants";
+import { AppDispatch } from "../types";
 
 
 export const loadIngredients = () => (dispatch: AppDispatch) => {

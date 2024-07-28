@@ -1,0 +1,84 @@
+@value paddings: "@ya.praktikum/react-developer-burger-ui-components/dist/ui/box.css";
+@value p-6, mt-6, mb-6 from paddings;
+@value typography: "@ya.praktikum/react-developer-burger-ui-components/dist/ui/common.css";
+@value text, text_type_main-small, text_type_main-medium, text_type_main-default, text_color_inactive, text_type_digits-default from typography;
+
+.header {
+	display: flex;
+	justify-content: space-between;
+}
+
+.orderId {
+	composes: text, text_type_digits-default;
+	color: #FFFFFF;
+}
+
+.date {
+	composes: text, text_type_main-default, text_color_inactive;
+}
+
+.title {
+	composes: text, text_type_main-medium;
+	margin-top: 24px;
+	color: #FFFFFF;
+}
+
+.container {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 24px;
+}
+
+.imageList {
+	display: flex;
+	transform-style: preserve-3d;
+}
+
+.imageBox {
+	position: relative;
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 64px;
+	height: 64px;
+	border: solid 2px transparent;
+	border-radius: 50%;
+	background-color: #131316;
+}
+
+.imageBox:before {
+	content: '';
+	position: absolute;
+	inset: -2px;
+	border-radius: 50%;
+	padding: 2px;
+	background: linear-gradient(63.18deg, #801AB3 0%, #4C4CFF 100%);
+	-webkit-mask: 
+		linear-gradient(#fff 0 0) content-box, 
+		linear-gradient(#fff 0 0);
+	-webkit-mask-composite: xor;
+			mask-composite: exclude; 
+}
+
+.imageBox img {
+	width: 64px;
+	height: 90%;
+	object-fit: cover;
+	border-radius: 50%;
+	background-color: #131316;
+}
+
+.imageBox:not(:first-child) {
+	margin-left: -16px;
+	transform: rotateY(-1deg);
+}
+
+.status {
+	composes: text, text_type_main-default;
+	margin-top: 8px;
+}
+
+.statusDone {
+	color: #00CCCC;
+}

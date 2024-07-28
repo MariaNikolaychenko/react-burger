@@ -3,27 +3,22 @@ import { useSelector } from 'react-redux';
 import { getAuthInfo } from '../services/auth/selectors';
 import { useEffect } from 'react';
 
-type TProtectedRouteElementProps = {
+type TPublicRouteElementProps = {
 	element: JSX.Element
 }
 
-export const ProtectedRouteElement = ({ element }: TProtectedRouteElementProps) => {
+export const PublicRouteElement = ({ element }: TPublicRouteElementProps) => {
 	const { name } = useSelector(getAuthInfo);
 	const location = useLocation();
 	const navigate = useNavigate();
-	
-	const from = location.state?.from || '/login';
+	const from = location.state?.from || '/';
 
 	useEffect(() => {
-		if (!name) {
+		if (name) {
 			navigate(from);
 		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [name])
 
-	return (
-		<>
-			{name && element}
-		</>
-	);
+	return element;
 }

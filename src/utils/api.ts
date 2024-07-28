@@ -55,8 +55,8 @@ export const registerApi = async (data: TRegister)  => {
 };
 
 // Логин
-export const loginApi = (data: TLogin) => {
-	return request("auth/login", {
+export const loginApi = async (data: TLogin) => {
+	return await request("auth/login", {
 		method: 'POST',
 		mode: 'cors',
 		cache: 'no-cache',

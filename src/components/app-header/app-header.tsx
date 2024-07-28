@@ -8,7 +8,7 @@ import {
 import styles from "../app-header/app-header.module.css";
 import { NavLink } from 'react-router-dom';
 
-const AppHeader = () => {
+const AppHeader = (): React.JSX.Element => {
 	return (
 		<header className={styles.header}>
 			<div className={styles.wrapper}>
@@ -27,7 +27,7 @@ const AppHeader = () => {
 					</NavLink>
 
 					<NavLink
-						to="/orders-list"
+						to="/feed"
 						className={({isActive}) => isActive ? `${styles.linkActive} ${styles.link}` : `${styles.link}`}
 					>
 						<ListIcon type="secondary" />
