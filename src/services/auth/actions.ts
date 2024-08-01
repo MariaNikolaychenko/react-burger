@@ -44,9 +44,7 @@ export const registerAction = (data: TRegister) => (dispatch: AppDispatch) => {
 				let authToken;
 				if (res.accessToken.startsWith("Bearer ")){
 					authToken = res.accessToken.split('Bearer ')[1];
-				}
-
-				if (authToken) {
+					
 					setCookie('token', authToken);
 					localStorage.setItem('refreshToken', res.refreshToken);
 				}

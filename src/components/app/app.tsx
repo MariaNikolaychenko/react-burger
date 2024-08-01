@@ -39,6 +39,7 @@ const App = () => {
 	useEffect(() => {
 		dispatch(loadIngredients());
 
+		
 		if (getCookie('token')) {
 			dispatch(getUserDataAction());
 		}
@@ -73,8 +74,9 @@ const App = () => {
 						<Route path='/profile' element={<ProtectedRouteElement element={<Profile />} />} >
 							<Route index element={<UserProfile />} />
 							<Route path="orders" element={<Orders />} />
-							<Route path="orders/:id" element={<OrderInfo />} />
 						</Route>
+
+						<Route path='/profile/orders/:id' element={<ProtectedRouteElement element={<OrderInfo />} />} />
 
 						{/* Feed */}
 						<Route path='/feed' element={<Feed />} />

@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getAuthInfo } from '../services/auth/selectors';
 import { useEffect } from 'react';
+import { getCookie } from '../utils/cookie';
 
 type TProtectedRouteElementProps = {
 	element: JSX.Element
@@ -9,14 +10,11 @@ type TProtectedRouteElementProps = {
 
 export const ProtectedRouteElement = ({ element }: TProtectedRouteElementProps) => {
 	const { name } = useSelector(getAuthInfo);
-	const location = useLocation();
 	const navigate = useNavigate();
-	
-	const from = location.state?.from || '/login';
 
 	useEffect(() => {
-		if (!name) {
-			navigate(from);
+		if (!name && !(getCookie('token'))) {
+			navigate('/login');
 		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [name])
