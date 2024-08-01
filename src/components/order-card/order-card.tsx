@@ -5,24 +5,25 @@ import styles from './order-card.module.css';
 import { getIngredients } from '../../services/burger-ingredients/selectors';
 import { TIngredient } from '../../utils/types';
 import { useEffect, useState } from 'react';
+import { IWsOrders } from "../../services/types";
 
 type TOrderCardProps = {
-	order?: any;
+	order: IWsOrders;
 	showStatus?: boolean;
 }
 const OrderCard = ({order, showStatus}: TOrderCardProps): React.JSX.Element => {
-	// console.log('orderAAAA');
-	// console.log(order);
 	const ingredients = useSelector(getIngredients);
 	const [orderIngredients, setOrderIngredients] = useState<TIngredient[]>([]);
 	const [price, setPrice] = useState(0);
+	const [countHiddenIngredients, setCountHiddenIngredients] = useState(0);
+	const maxIngredientsNumber = 6;
 
 	useEffect(() => {
-        if (ingredients?.length !== 0) {
-            let totalPrice = 0;
+		if (ingredients?.length !== 0) {
+			let totalPrice = 0;
 
 			const orderIngredients = ingredients.filter((ingredient: TIngredient) => {
-				return order.ingredients.some((id: string) => ingredient._id === id);
+				return order.ingredients.some((id) => ingredient._id === id);
 			})
 
 			orderIngredients.map((item) => {
@@ -34,19 +35,18 @@ const OrderCard = ({order, showStatus}: TOrderCardProps): React.JSX.Element => {
 
 				return totalPrice;
 			})
+			setCountHiddenIngredients(orderIngredients.length - maxIngredientsNumber + 1);
+			const displayedIngredients = orderIngredients.slice(0, maxIngredientsNumber);
 			setPrice(totalPrice);
-			setOrderIngredients(orderIngredients);
-        }
-    }, [ingredients, order.ingredients]);
-
+			setOrderIngredients(displayedIngredients);
+		}
+	}, [ingredients, order.ingredients]);
 
 	const status = order.status === 'done'
 		? 'Выполнен'
 		: order.status === 'created'
 			? 'Создан'
 			: 'Готовится';
-
-	//console.log(orderIngredients);
 
 	return (
 		<div>
@@ -67,13 +67,18 @@ const OrderCard = ({order, showStatus}: TOrderCardProps): React.JSX.Element => {
 			</div>}
 			<div className={styles.container}>
 				<div className={styles.imageList}>
-					{orderIngredients.map((item) => (
-						<div className={styles.imageBox}>
+					{orderIngredients.map((item, index) => (
+						<div key={index} className={styles.imageBox}>
 							<img
 								className={styles.image}
 								src={item.image_mobile}
 								alt={item.name}
 							/>
+							{(index + 1 === orderIngredients.length) && (countHiddenIngredients > 1) && 
+								<span className={styles.hiddenCount}>+{countHiddenIngredients}</span>
+							}
+
+
 						</div>
 					))}
 				</div>

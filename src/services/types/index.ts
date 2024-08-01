@@ -2,7 +2,7 @@ import { ThunkAction } from "redux-thunk";
 import { TAuthActions } from "../auth/types";
 import { TBurgerConstructorActions } from "../burger-constructor/types";
 import { TIngredientsAction } from "../burger-ingredients/types";
-import { WS_CONNECTION_CLOSED, WS_CONNECTION_ERROR, WS_CONNECTION_START, WS_CONNECTION_SUCCESS, WS_GET_MESSAGE, WS_SEND_MESSAGE } from "../constants";
+import { WS_CONNECTION_CLOSED, WS_CONNECTION_ERROR, WS_CONNECTION_START, WS_CONNECTION_USER_START, WS_CONNECTION_SUCCESS, WS_GET_MESSAGE, WS_SEND_MESSAGE } from "../constants";
 import { TCurrentIngredientActions } from "../ingredient/types";
 import { TOrderActions } from "../order/types";
 import { rootReducer } from "../reducer";
@@ -22,6 +22,10 @@ export type TAppActions =
 
 export interface IWSConnectionStart {
   readonly type: typeof WS_CONNECTION_START;
+}
+
+export interface IWSConnectionUserStart {
+  readonly type: typeof WS_CONNECTION_USER_START;
 }
 
 export interface IWSConnectionSuccessAction {
@@ -49,6 +53,7 @@ export interface IWSSendMessageAction {
 
 export type TWSActions =
 	| IWSConnectionStart
+	| IWSConnectionUserStart
 	| IWSConnectionSuccessAction
 	| IWSConnectionErrorAction
 	| IWSConnectionClosedAction
@@ -59,6 +64,7 @@ export type AppActions = TWSActions | TAppActions;
 
 export type TWSStoreActions = {
 	wsInit: typeof  WS_CONNECTION_START,
+	wsInitUser: typeof  WS_CONNECTION_USER_START,
 	wsSendMessage: typeof  WS_SEND_MESSAGE,
 	onOpen: typeof  WS_CONNECTION_SUCCESS,
 	onClose: typeof WS_CONNECTION_CLOSED,

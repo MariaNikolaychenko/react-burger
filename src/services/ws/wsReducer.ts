@@ -4,7 +4,6 @@ import {
 	WS_CONNECTION_CLOSED,
 	WS_GET_MESSAGE
 } from '../constants';
-import { getCurrentTimestamp } from '../../utils/datetime';
 import type { IMessage, TWSActions } from '../types';
 
 type TWSState = {
@@ -43,7 +42,6 @@ export const wsReducer = (state = initialState, action: TWSActions) => {
 			};
 
 		case WS_GET_MESSAGE:
-			//const msg = { ...action.payload, timestamp: getCurrentTimestamp() };
 			return {
 				...state,
 				error: undefined,

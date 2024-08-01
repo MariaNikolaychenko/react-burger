@@ -41,7 +41,7 @@ export const ResetPassword = () => {
 
 	return (
 		<>
-		{isForgotSuccess &&
+			{isForgotSuccess ?
 			<form className={`${styles.positionCenter} ${styles.form}`} onSubmit={handleSubmit}>
 				<h1 className={styles.formTitle}>Восстановление пароля</h1>
 				<PasswordInput 
@@ -72,8 +72,12 @@ export const ResetPassword = () => {
 						<Link className={styles.formLink} to="/login">Войти</Link>
 					</p>
 				</div>
-			</form>
-		}
+			</form> :
+			<Navigate
+				to={from}
+				replace
+			/>
+			}
 		</>
 	);
 };

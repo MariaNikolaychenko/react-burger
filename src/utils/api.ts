@@ -42,6 +42,10 @@ export const createOrderApi = (data: Array<string>) => {
 		})
 	});
 }
+// Получить ордер по номеру заказа
+export const getOrderByNumberApi = (number: string) => {
+	return request(`orders/${number}`);
+}
 
 // Регистрация
 export const registerApi = async (data: TRegister)  => {

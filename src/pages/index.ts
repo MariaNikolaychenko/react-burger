@@ -8,7 +8,7 @@ import { UserProfile } from './profile/user';
 import { Orders } from './profile/orders';
 import { IngredientPage } from './ingredients/ingredients';
 import { Feed } from './feed/feed';
-import { OrderDetails } from './order-details/order-details'
+import { OrderInfo } from './order-info/order-info'
 import { NotFound404 } from './404/404';
 
 export { 
@@ -22,6 +22,6 @@ export {
 	Orders,
 	IngredientPage,
 	Feed,
-	OrderDetails,
+	OrderInfo,
 	NotFound404
 };

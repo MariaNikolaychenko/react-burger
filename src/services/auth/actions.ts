@@ -10,7 +10,7 @@ import {
 } from "../../utils/api";
 import { TLogin, TRegister, TResetPassword } from "../../utils/types";
 import { AppDispatch } from "../types";
-import { setCookie, deleteCookie } from "../../utils/cookie";
+import { setCookie, deleteCookie, getCookie } from "../../utils/cookie";
 import {
 	REGISTER_LOADING,
 	REGISTER_SUCCESS,
@@ -32,31 +32,27 @@ import {
 	RESET_PASSWORD_FAILED, 
 	RESET_PASSWORD_SUCCESS 
 } from "../constants";
+import { isTokenExpired } from "../../utils/token";
 
 
 export const registerAction = (data: TRegister) => (dispatch: AppDispatch) => {
 	dispatch({ type: REGISTER_LOADING });
 
 	registerApi(data)
-		.then(res => {
-			// @ts-ignore
+		.then((res: any) => {
 			if (res && res.success) {
 				let authToken;
-				// @ts-ignore
 				if (res.accessToken.startsWith("Bearer ")){
-					// @ts-ignore
 					authToken = res.accessToken.split('Bearer ')[1];
 				}
 
 				if (authToken) {
 					setCookie('token', authToken);
-					// @ts-ignore
 					localStorage.setItem('refreshToken', res.refreshToken);
 				}
 
 				dispatch({
 					type: REGISTER_SUCCESS,
-					// @ts-ignore
 					user: res.user,
 				});
 
@@ -66,7 +62,7 @@ export const registerAction = (data: TRegister) => (dispatch: AppDispatch) => {
 				});
 			}
 		})
-		.catch((err: any) => {
+		.catch((err: string) => {
 			dispatch({
 			  	type: REGISTER_FAILED,
 			});
@@ -79,21 +75,16 @@ export const loginAction = (data: TLogin) => (dispatch: AppDispatch) => {
 	dispatch({ type: LOGIN});
 
 	loginApi(data)
-		.then(res => {
-			// @ts-ignore
+		.then((res: any) => {
 			if (res && res.success) {
-				// @ts-ignore
 				if (res.accessToken.startsWith("Bearer ")){
-					// @ts-ignore
 					const authToken = res.accessToken.split('Bearer ')[1];
 		
 					setCookie('token', authToken);
-					// @ts-ignore
 					localStorage.setItem('refreshToken', res.refreshToken);
 				}
 				dispatch({
 					type: LOGIN_SUCCESS,
-					// @ts-ignore
 					user: res.user,
 				});
 
@@ -128,69 +119,60 @@ export const logoutAction = () => (dispatch: AppDispatch) => {
 
 export const refreshTokenAction = () => (dispatch: AppDispatch) => {
 	refreshTokenApi()
-		.then(res => {
-			// @ts-ignore
-			if (res && res.success) {
-				let authToken;
-				// @ts-ignore
-				if (res.accessToken.startsWith("Bearer ")){
-					// @ts-ignore
-					authToken = res.accessToken.split('Bearer ')[1]; 
-				}
-
-				if (authToken) {
-					setCookie('token', authToken);
-					// @ts-ignore
-					localStorage.setItem('refreshToken', res.refreshToken);
-				}
-				dispatch({
-					type: REFRESH_TOKEN_SUCCESS,
-					// @ts-ignore
-					user: res.user,
-				})
-			} else {
-				dispatch({
-					type: REFRESH_TOKEN_FAILED
-				});
+	.then((res: any) => {
+		if (res && res.success) {
+			if (res.accessToken.startsWith("Bearer ")){
+				setCookie('token', res.accessToken.split('Bearer ')[1]);
+				localStorage.setItem('refreshToken', res.refreshToken);
 			}
-		})
-		.catch(console.error);
+			dispatch({
+				type: REFRESH_TOKEN_SUCCESS
+			});
+			dispatch(getUserDataAction());
+		} else {
+			dispatch({
+				type: REFRESH_TOKEN_FAILED
+			});
+			dispatch(logoutAction());
+		}
+	})
+	.catch(console.error);
 }
 
 export const getUserDataAction = () => (dispatch: AppDispatch) => {
 	dispatch({ type: GET_USER_DATA_LOADING });
-
 	getUserDataApi()
-		.then(res => {
-			// @ts-ignore
-			if (res && res.success) {
-				dispatch({
-					type: GET_USER_DATA_SUCCESS,
-					// @ts-ignore
-					user: res.user
-				})
-				
+	.then((res: any) => {
+		if (res && res.success) {
+			dispatch({
+				type: GET_USER_DATA_SUCCESS,
+				user: res.user
+			})
+			
+		}
+	})
+	.catch((error: string) => {
+		if (error === 'Ошибка 403') {
+			const refreshToken = localStorage.getItem('refreshToken');
+			const isExpired = isTokenExpired(getCookie('token'));
+
+			if (refreshToken && isExpired) {
+				dispatch(refreshTokenAction());
 			} else {
 				dispatch({
-					type: GET_USER_DATA_FAILED
+					type: GET_USER_DATA_FAILED,
 				});
 			}
-		})
-		.catch((err: any) => {
-			dispatch({
-			  	type: GET_USER_DATA_FAILED,
-			});
-		});
+		}
+	});
 }
 
 export const updateUserDataAction = (data: TRegister) => (dispatch: AppDispatch) => {
 	updateUserDataApi(data)
-		.then(res => {
-			// @ts-ignore
+		.then((res: any) => {
 			if (res && res.success) {
 				dispatch({
 					type: UPDATE_USER_DATA_SUCCESS,
-					// @ts-ignore
 					user: res.user
 				})
 				

@@ -74,9 +74,25 @@
 	transform: rotateY(-1deg);
 }
 
+.hiddenCount {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+	position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: rgba(28, 28, 33, 0.6);
+    color: #fff;
+	composes: text, text_type_digits-default;
+}
+
 .status {
 	composes: text, text_type_main-default;
 	margin-top: 8px;
+	color: #F2F2F3;
 }
 
 .statusDone {

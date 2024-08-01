@@ -1,7 +1,10 @@
 import {
 	NEW_ORDER_LOADING,
 	NEW_ORDER_SUCCESS,
-	NEW_ORDER_FAILED
+	NEW_ORDER_FAILED,
+	GET_ORDER_BY_NUMBER_FAILED,
+	GET_ORDER_BY_NUMBER_SUCCESS,
+	GET_ORDER_BY_NUMBER_LOADING,
 } from '../constants'
 import { TOrderActions, TOrderState } from './types';
 
@@ -9,9 +12,13 @@ const initialState = {
 	isOrderLoading: false,
 	isOrderSuccess: false,
 	isOrderFailed: false,
+	isGetOrderByNumberLoading: false,
+	isGetOrderByNumberSuccess: false,
+	isGetOrderByNumberFailed: false,
 	order: null,
 	orderName: '',
-	orderNumber: null
+	orderNumber: null,
+	currentOrder: null
 };
 
 export const reducer = (state: TOrderState = initialState, action: TOrderActions) => {
@@ -31,8 +38,6 @@ export const reducer = (state: TOrderState = initialState, action: TOrderActions
 				isOrderSuccess: true,
 				isOrderFailed: false,
 				order: action.order
-				// orderName: action.order.name,
-				// orderNumber: action.order.number
 			};
 		}
 		case NEW_ORDER_FAILED: {
@@ -43,6 +48,28 @@ export const reducer = (state: TOrderState = initialState, action: TOrderActions
 				isOrderFailed: true,
 			};
 		}
+		case GET_ORDER_BY_NUMBER_LOADING: {
+			return {
+			  ...state,
+			  isGetOrderByNumberLoading: true,
+			  isGetOrderByNumberFailed: false
+			}
+		  }
+		  case  GET_ORDER_BY_NUMBER_SUCCESS: {
+			return {
+			  ...state,
+			  currentOrder: action.payload,
+			  isGetOrderByNumberLoading: false
+			}
+		  }
+		  case GET_ORDER_BY_NUMBER_FAILED: {
+			return {
+			  ...state,
+			  isGetOrderByNumberLoading: false,
+			  isGetOrderByNumberSuccess: false,
+			  isGetOrderByNumberFailed: true
+			}
+		  }
 		default: {
 			return state;
 		}

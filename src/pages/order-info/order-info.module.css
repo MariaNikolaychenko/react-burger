@@ -5,7 +5,8 @@
 	display: flex;
 	flex-direction: column;
 	width: 640px;
-	margin: 120px auto 0;
+	margin: 0 auto;
+	padding-top: 60px;
 }
 
 .orderId {
@@ -16,11 +17,13 @@
 
 .title {
 	composes: text, text_type_main-medium;
+	text-align: left;
 }
 
 .status {
 	composes: text, text_type_main-default;
 	margin-top: 12px;
+	text-align: left;
 }
 
 .statusDone {
@@ -87,6 +90,7 @@
 	flex-wrap: wrap;
 	margin-left: 16px;
 	max-width: 320px;
+	text-align: left;
 }
 
 .details {

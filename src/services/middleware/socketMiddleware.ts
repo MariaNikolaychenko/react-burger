@@ -1,8 +1,8 @@
 import type { Middleware, MiddlewareAPI } from 'redux';
 
-import { getCurrentTimestamp } from '../../utils/datetime';
-import { AppActions, AppDispatch, IMessage, RootState, TWSStoreActions } from '../types';
-import { getCookie } from '../../utils/cookie';
+import { AppActions, AppDispatch, RootState, TWSStoreActions } from '../types';
+import { getCookie, setCookie } from '../../utils/cookie';
+import { refreshTokenApi } from '../../utils/api';
 
 export const socketMiddleware = (wsUrl: string, wsActions: TWSStoreActions): Middleware => {
 	return ((store: MiddlewareAPI<AppDispatch, RootState>) => {
@@ -13,6 +13,7 @@ export const socketMiddleware = (wsUrl: string, wsActions: TWSStoreActions): Mid
 			const { type } = action;
 			const { 
 				wsInit, 
+				wsInitUser, 
 				wsSendMessage, 
 				onOpen, 
 				onClose, 
@@ -20,40 +21,56 @@ export const socketMiddleware = (wsUrl: string, wsActions: TWSStoreActions): Mid
 				onMessage 
 			} = wsActions;
 
-			const { name } = getState().user;
+			const user = getState().user;
 			
-			if (type === wsInit && name ) {
-				//socket = new WebSocket(`${wsUrl}?token=${token}`);
+			if (type === wsInit) {
 				socket = new WebSocket(`${wsUrl}/all`);
+			}
+
+			if (type === wsInitUser && user.name) {
+				socket = new WebSocket(
+					`${wsUrl}?token=${getCookie('token')}`
+				);
 			}
 			if (socket) {
 				socket.onopen = event => {
-					// @ts-ignore
 					dispatch({ type: onOpen, payload: event });
 				};
 
 				socket.onerror = event => {
-					// @ts-ignore
 					dispatch({ type: onError, payload: event });
 				};
 
-				socket.onmessage = event => {
+				socket.onmessage = (event: MessageEvent) => {
 					const { data } = event;
-					const parsedData: IMessage = JSON.parse(data);
-					
-					// @ts-ignore
+					const parsedData = JSON.parse(data);
+
+					if (parsedData.message === "Invalid or missing token") {
+						refreshTokenApi()
+						    .then((refreshData: any) => {
+								const authToken = refreshData.accessToken.split('Bearer ')[1];		
+								setCookie('token', authToken);
+								localStorage.setItem('refreshToken', refreshData.refreshToken);
+						        dispatch({type: wsInitUser});
+						    })
+						    .catch((err) => {
+								dispatch({ type: onError, payload: err });
+							});
+							dispatch({ type: onClose, payload: event});
+
+						return;
+					}
+
 					dispatch({ type: onMessage, payload: parsedData });
 				};
 
 				socket.onclose = event => {
-					// @ts-ignore
 					dispatch({ type: onClose, payload: event });
 				};
 
 				if (type === wsSendMessage) {
 					const payload = action.payload;
-					//const message = { ...(payload as IMessage), token: getCookie('token') };
-					const message = { ...(payload), token: getCookie('token') };
+					const message = { ...payload, token: getCookie('token') };
 					socket.send(JSON.stringify(message));
 				}
 			}
