@@ -3,7 +3,6 @@ import type { Middleware, MiddlewareAPI } from 'redux';
 import { AppDispatch, RootState, TWSActions, TWSStoreActions } from '../types';
 import { getCookie, setCookie } from '../../utils/cookie';
 import { refreshTokenApi } from '../../utils/api';
-import { getUserDataAction } from '../auth/actions';
 
 const RECONNECT_PERIOD = 3000;
 
@@ -51,6 +50,7 @@ export const socketMiddleware = (wsActions: TWSStoreActions): Middleware => {
 				socket.onmessage = (event: MessageEvent) => {
 					const { data } = event;
 					const parsedData = JSON.parse(data);
+
 					if (withTokenRefresh && parsedData.message === "Invalid or missing token") {
 						refreshTokenApi()
 						    .then((refreshData: any) => {
@@ -61,9 +61,7 @@ export const socketMiddleware = (wsActions: TWSStoreActions): Middleware => {
 						    .catch((err) => {
 								dispatch({ type: onError, payload: err });
 							});
-
 						dispatch({type: disconnect});
-
 						return;
 					}
 

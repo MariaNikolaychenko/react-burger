@@ -1,7 +1,5 @@
-// import { TIngredient } from "../../utils/types";
 import { TIngredient } from "../../utils/types";
 import { CLEAR_CONSTRUCTOR, GET_ORDER_BY_NUMBER_FAILED, GET_ORDER_BY_NUMBER_LOADING, GET_ORDER_BY_NUMBER_SUCCESS, NEW_ORDER_FAILED, NEW_ORDER_LOADING, NEW_ORDER_SUCCESS } from "../constants";
-import { IWsOrders } from "../types";
 
 export type TOrder = {
     ingredients: Array<TIngredient>;
