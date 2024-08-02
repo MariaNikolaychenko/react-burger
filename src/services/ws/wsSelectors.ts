@@ -1,4 +1,6 @@
 import { RootState } from "../types";
 
-export const getWsMessage = (state: RootState) => state.wsReducer.messages || [];
-export const getWsConnected = (state: RootState) => state.wsReducer.wsConnected;
+export const getWsOrders = (state: RootState) => state.allOrders.messages || [];
+export const getWsUserOrders = (state: RootState) => state.userOrders.messages || [];
+export const getWsOrdersConnected = (state: RootState) => state.allOrders.wsConnected;
+export const getWsUserOrdersConnected = (state: RootState) => state.userOrders.wsConnected;

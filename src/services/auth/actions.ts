@@ -41,11 +41,8 @@ export const registerAction = (data: TRegister) => (dispatch: AppDispatch) => {
 	registerApi(data)
 		.then((res: any) => {
 			if (res && res.success) {
-				let authToken;
 				if (res.accessToken.startsWith("Bearer ")){
-					authToken = res.accessToken.split('Bearer ')[1];
-					
-					setCookie('token', authToken);
+					setCookie('token', res.accessToken.split('Bearer ')[1]);
 					localStorage.setItem('refreshToken', res.refreshToken);
 				}
 
@@ -76,9 +73,7 @@ export const loginAction = (data: TLogin) => (dispatch: AppDispatch) => {
 		.then((res: any) => {
 			if (res && res.success) {
 				if (res.accessToken.startsWith("Bearer ")){
-					const authToken = res.accessToken.split('Bearer ')[1];
-		
-					setCookie('token', authToken);
+					setCookie('token', res.accessToken.split('Bearer ')[1]);
 					localStorage.setItem('refreshToken', res.refreshToken);
 				}
 				dispatch({
@@ -150,7 +145,7 @@ export const getUserDataAction = () => (dispatch: AppDispatch) => {
 		}
 	})
 	.catch((error: string) => {
-		if (error === 'Ошибка 403') {
+		if ((error === 'Ошибка 401') || (error === 'Ошибка 403')) {
 			const refreshToken = localStorage.getItem('refreshToken');
 			const isExpired = isTokenExpired(getCookie('token'));
 

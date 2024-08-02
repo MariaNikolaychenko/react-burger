@@ -1,28 +1,30 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import OrderCard from '../../components/order-card/order-card';
 import styles from './feed.module.css'
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { WS_CONNECTION_CLOSED, WS_CONNECTION_START } from '../../services/constants';
 import { useSelector } from 'react-redux';
-import { getWsMessage, getWsConnected } from '../../services/ws/wsSelectors';
+import { getWsOrders, getWsOrdersConnected } from '../../services/ws/wsSelectors';
 import { IMessage, IWsOrders } from '../../services/types';
 import Preloader from '../../components/preloader/preloader';
 import { Link, useLocation } from 'react-router-dom';
+import { WS_URL_ALL } from '../../utils/api';
 
 export const Feed = (): React.JSX.Element => {
 	const location = useLocation();
 	const dispatch = useAppDispatch();
-	const message: IMessage = useSelector(getWsMessage);
-	const isConnected = useSelector(getWsConnected);
+	const message: IMessage = useSelector(getWsOrders);
+	const isConnected = useSelector(getWsOrdersConnected);
 	const [orders, setOrders] = useState<IWsOrders[]>([]);
-	const [total, setTotal] = useState<number>(0);
-	const [totalToday, setTotalToday] = useState<number>(0);
-	const [doneOrders, setDoneOrders] = useState<IWsOrders[]>([]);
-	const [pendingOrders, setPendingOrders] = useState<IWsOrders[]>([]);
+	const [total, setTotal] = useState(0);
+	const [totalToday, setTotalToday] = useState(0);
+	//const [doneOrders, setDoneOrders] = useState<IWsOrders[]>([]);
+	//const [pendingOrders, setPendingOrders] = useState<IWsOrders[]>([]);
 
 	useEffect(
 		() => {
-			dispatch({ type: WS_CONNECTION_START });
+			
+			dispatch({ type: WS_CONNECTION_START, url: WS_URL_ALL });
 			return () => {
 				dispatch({type: WS_CONNECTION_CLOSED})
 			}
@@ -38,13 +40,13 @@ export const Feed = (): React.JSX.Element => {
         setTotalToday(message?.totalToday)
 	}, [message]);
 
-	useEffect(() => {
-		if (!!orders && orders?.length !== 0) {
-			const searchDoneOrders = orders.filter((order: IWsOrders) => order.status === 'done').slice(0, 10);
-			const searchPendingOrders = orders.filter((order: IWsOrders) => order.status === 'pending').slice(0, 10);
-			setDoneOrders(searchDoneOrders);
-			setPendingOrders(searchPendingOrders);
-		}
+
+	const doneOrders = useMemo(() => {
+		return orders.filter((order: IWsOrders) => order.status === 'done').slice(0, 10);
+	}, [orders]);
+
+	const pendingOrders = useMemo(() => {
+		return orders.filter((order: IWsOrders) => order.status === 'pending').slice(0, 10);
 	}, [orders]);
 
 	if (!isConnected) return <Preloader />

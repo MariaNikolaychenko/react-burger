@@ -2,6 +2,8 @@ import { getCookie } from "./cookie";
 import { TLogin, TRegister, TResetPassword } from "./types";
 
 export const BASE_URL = "https://norma.nomoreparties.space/api/";
+export const WS_URL = "wss://norma.nomoreparties.space/orders";
+export const WS_URL_ALL = `${WS_URL}/all`;
 
 // Функция проверки ответа на `ok`
 const checkResponse = <T>(res: Response): Promise<T> => {

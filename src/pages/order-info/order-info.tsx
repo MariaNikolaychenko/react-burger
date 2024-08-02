@@ -37,16 +37,27 @@ export const OrderInfo = (): React.JSX.Element => {
 			});
 			setPrice(totalPrice);
 
-			let orderIngredientsList: TIngredient[] = [];
+			const orderIngredientsList: TIngredient[] = [];
+			const orderIngredientsWithCount:TIngredient[] = []
 			let orderUniqueIngredients = Array.from(new Set(order?.ingredients));
 
 			orderUniqueIngredients.forEach(value => orderIngredientsList.push(ingredientsList.filter(ingredient => ingredient['_id'] === value)[0]));
 			orderIngredientsList.forEach(item => {
-				item.type === 'bun'
-					? item.count = 2
-					: item.count = order?.ingredients.filter((ingredient: string) => ingredient === item['_id']).length
+				if (item.type === 'bun') {
+					orderIngredientsWithCount.push({
+						...item, 
+						count: 2
+					})
+				} else {
+					const count = order?.ingredients.filter((ingredient: string) => ingredient === item['_id']).length;
+					orderIngredientsWithCount.push({
+						...item, 
+						count: count
+					})
+				}
 			});
-			setOrderIngredients(orderIngredientsList)
+
+			setOrderIngredients(orderIngredientsWithCount)
 		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ingredientsList, order]);

@@ -1,30 +1,31 @@
 import { useEffect } from 'react';
 import OrderCard from '../../components/order-card/order-card';
 import styles from './profile.module.css';
-import { WS_CONNECTION_CLOSED, WS_CONNECTION_USER_START } from '../../services/constants';
+import { WS_USER_CONNECTION_CLOSED, WS_USER_CONNECTION_START } from '../../services/constants';
 import { getAuthInfo } from '../../services/auth/selectors';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 import Preloader from '../../components/preloader/preloader';
-import { getWsMessage, getWsConnected } from '../../services/ws/wsSelectors';
+import { getWsUserOrders, getWsUserOrdersConnected } from '../../services/ws/wsSelectors';
 import { IMessage } from '../../services/types';
 import { Link, useLocation } from 'react-router-dom';
+import { WS_URL } from '../../utils/api';
 
 export const Orders = (): React.JSX.Element => {
 	const user = useSelector(getAuthInfo);
 	const dispatch = useAppDispatch();
-	const message: IMessage = useSelector(getWsMessage);
-	const isConnected = useSelector(getWsConnected);
+	const message: IMessage = useSelector(getWsUserOrders);
+	const isConnected = useSelector(getWsUserOrdersConnected);
 	const location = useLocation();
 	
 	useEffect(
 		() => {
 			if (user.name) {
-				dispatch({ type: WS_CONNECTION_USER_START });
+				dispatch({ type: WS_USER_CONNECTION_START, url: WS_URL, useToken: true});
 			}
 
 			return () => {
-				dispatch({type: WS_CONNECTION_CLOSED})
+				dispatch({type: WS_USER_CONNECTION_CLOSED})
 			}
 		},
 		[dispatch, user.name]

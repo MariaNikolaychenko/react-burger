@@ -1,40 +1,47 @@
 import type { Middleware, MiddlewareAPI } from 'redux';
 
-import { AppActions, AppDispatch, RootState, TWSStoreActions } from '../types';
+import { AppDispatch, RootState, TWSActions, TWSStoreActions } from '../types';
 import { getCookie, setCookie } from '../../utils/cookie';
 import { refreshTokenApi } from '../../utils/api';
+import { getUserDataAction } from '../auth/actions';
 
-export const socketMiddleware = (wsUrl: string, wsActions: TWSStoreActions): Middleware => {
+const RECONNECT_PERIOD = 3000;
+
+export const socketMiddleware = (wsActions: TWSStoreActions): Middleware => {
 	return ((store: MiddlewareAPI<AppDispatch, RootState>) => {
 		let socket: WebSocket | null = null;
+		let isConnected = false;
+        let reconnectTimer = 0;
+		const {
+			wsInit, 
+			wsSendMessage, 
+			onOpen, 
+			onClose, 
+			onError, 
+			onMessage,
+			disconnect
+		} = wsActions;
+		let url = '';
+		let withTokenRefresh = false;
 
-		return next => (action: AppActions) => {
-			const { dispatch, getState } = store;
-			const { type } = action;
-			const { 
-				wsInit, 
-				wsInitUser, 
-				wsSendMessage, 
-				onOpen, 
-				onClose, 
-				onError, 
-				onMessage 
-			} = wsActions;
-
-			const user = getState().user;
+		return next => (action: TWSActions) => {
+			const { dispatch } = store;
 			
-			if (type === wsInit) {
-				socket = new WebSocket(`${wsUrl}/all`);
+			if (action.type === wsInit) {
+				url = action.url;
+
+				if (action.useToken) {
+					url += `?token=${getCookie('token')}`;
+					withTokenRefresh = true;
+				}
+
+				socket = new WebSocket(url);
+				isConnected = true;
 			}
 
-			if (type === wsInitUser && user.name) {
-				socket = new WebSocket(
-					`${wsUrl}?token=${getCookie('token')}`
-				);
-			}
 			if (socket) {
 				socket.onopen = event => {
-					dispatch({ type: onOpen, payload: event });
+					dispatch({ type: onOpen });
 				};
 
 				socket.onerror = event => {
@@ -44,19 +51,18 @@ export const socketMiddleware = (wsUrl: string, wsActions: TWSStoreActions): Mid
 				socket.onmessage = (event: MessageEvent) => {
 					const { data } = event;
 					const parsedData = JSON.parse(data);
-
-					if (parsedData.message === "Invalid or missing token") {
+					if (withTokenRefresh && parsedData.message === "Invalid or missing token") {
 						refreshTokenApi()
 						    .then((refreshData: any) => {
-								const authToken = refreshData.accessToken.split('Bearer ')[1];		
-								setCookie('token', authToken);
+								setCookie('token', refreshData.accessToken.split('Bearer ')[1]);
 								localStorage.setItem('refreshToken', refreshData.refreshToken);
-						        dispatch({type: wsInitUser});
+						        dispatch({type: wsInit, url: url, useToken: withTokenRefresh});
 						    })
 						    .catch((err) => {
 								dispatch({ type: onError, payload: err });
 							});
-							dispatch({ type: onClose, payload: event});
+
+						dispatch({type: disconnect});
 
 						return;
 					}
@@ -64,15 +70,29 @@ export const socketMiddleware = (wsUrl: string, wsActions: TWSStoreActions): Mid
 					dispatch({ type: onMessage, payload: parsedData });
 				};
 
-				socket.onclose = event => {
-					dispatch({ type: onClose, payload: event });
+				socket.onclose = () => {
+					dispatch({ type: onClose });
+
+					if (isConnected) {
+                        reconnectTimer = window.setTimeout(() => {
+							dispatch({type: wsInit, url: url, useToken: withTokenRefresh});
+                        }, RECONNECT_PERIOD);
+                    }
 				};
 
-				if (type === wsSendMessage) {
+				if (action.type === wsSendMessage) {
 					const payload = action.payload;
 					const message = { ...payload, token: getCookie('token') };
 					socket.send(JSON.stringify(message));
 				}
+			}
+
+			if (socket && (action.type === disconnect)) {
+				clearTimeout(reconnectTimer);
+				isConnected = false;
+				reconnectTimer = 0;
+				socket.close();
+				socket = null;
 			}
 
 			next(action);
