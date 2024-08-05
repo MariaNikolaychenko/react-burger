@@ -1,23 +1,21 @@
 import { EmailInput, Button } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from "react-redux";
 import { SyntheticEvent, useEffect, useState, ChangeEvent } from "react";
-import { useAuth } from "../../services/authProvider";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 
 import { forgotPasswordAction } from "../../services/auth/actions";
-import Preloader from "../../components/preloader/preloader";
 
 import styles from '../index.module.css';
 import { getAuthInfo } from "../../services/auth/selectors";
 
 export const ForgotPassword = (): React.JSX.Element => {
-	const dispatch = useAppDispatch();
+	const { name, isForgotSuccess } = useSelector(getAuthInfo);
 	const navigate = useNavigate();
-	const { isForgotSuccess } = useSelector(getAuthInfo);
-
-	const auth = useAuth();
-
+	const location = useLocation();
+	const from = location.state?.from?.pathname || "/";
+	const dispatch = useAppDispatch();
+	
 	const [form, setValue] = useState({ 
 		email: '' 
 	});
@@ -30,26 +28,15 @@ export const ForgotPassword = (): React.JSX.Element => {
 		e.preventDefault();
 		dispatch(forgotPasswordAction(form.email));
 	};
-
-	useEffect(() => {
-		if (auth.user) navigate(-1);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [auth]);
 	
-	const init = () => {
-		auth.getUser();
-	};
-	
-	useEffect(() => {
-		init();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
-
 	if (isForgotSuccess) { 	
 		navigate('/reset-password', { replace: true });
 	}
 
-	if (auth.loading) return <Preloader />
+	useEffect(() => {
+		if (name) navigate(from, { replace: true });
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	return (
 		<form className={`${styles.positionCenter} ${styles.form}`} onSubmit={handleSubmit}>

@@ -1,20 +1,26 @@
 import { useEffect, useCallback, useState, FormEvent, ChangeEvent }  from "react";
-import { useAuth } from '../../services/authProvider';
 
 import { 
 	EmailInput, 
 	PasswordInput, 
 	Button 
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Preloader from "../../components/preloader/preloader";
 
 import styles from '../index.module.css';
+import { getAuthInfo } from "../../services/auth/selectors";
+import { useSelector } from "react-redux";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { loginAction } from "../../services/auth/actions";
 
 
 export const Login = (): React.JSX.Element => {	
-	const auth = useAuth();
+	const { name, isLoginSuccess, isLoginLoading, isLoginFailed } = useSelector(getAuthInfo);
 	const navigate = useNavigate();
+	const location = useLocation();
+	const from = location.state?.from?.pathname || "/";
+	const dispatch = useAppDispatch();
 	
 	const [form, setValue] = useState({
 		email: '', 
@@ -28,27 +34,19 @@ export const Login = (): React.JSX.Element => {
 	const handleSubmit = useCallback(
 		(e: FormEvent<HTMLFormElement>) => {
 			e.preventDefault();
-			auth.signIn(form);
+			dispatch(loginAction(form));
 		},
-		[auth, form]
+		[dispatch, form]
 	)
 	
 	useEffect(() => {
-		if (auth.user) navigate('/', { replace: true });
-
+		if (name) {
+			navigate(from, { replace: true });
+		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [auth]);
-	
-	const init = () => {
-		auth.getUser();
-	};
-	
-	useEffect(() => {
-		init();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [dispatch, isLoginSuccess, name]);
 
-	if (auth.loading) return <Preloader />
+	if (isLoginLoading) return <Preloader />
 	
 	return (
 		<form className={`${styles.positionCenter} ${styles.form}`} onSubmit={handleSubmit}>
@@ -73,8 +71,8 @@ export const Login = (): React.JSX.Element => {
 				Войти
 			</Button>
 
-			{auth.error &&
-				<p className={styles.error}>{auth.error}</p>
+			{isLoginFailed &&
+				<p className={styles.error}>Ошибка</p>
 			}
 
 			<div className={styles.formFooter}>

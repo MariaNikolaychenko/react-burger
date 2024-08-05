@@ -2,6 +2,8 @@ import { getCookie } from "./cookie";
 import { TLogin, TRegister, TResetPassword } from "./types";
 
 export const BASE_URL = "https://norma.nomoreparties.space/api/";
+export const WS_URL = "wss://norma.nomoreparties.space/orders";
+export const WS_URL_ALL = `${WS_URL}/all`;
 
 // Функция проверки ответа на `ok`
 const checkResponse = <T>(res: Response): Promise<T> => {
@@ -42,6 +44,10 @@ export const createOrderApi = (data: Array<string>) => {
 		})
 	});
 }
+// Получить ордер по номеру заказа
+export const getOrderByNumberApi = (number: string) => {
+	return request(`orders/${number}`);
+}
 
 // Регистрация
 export const registerApi = async (data: TRegister)  => {
@@ -55,8 +61,8 @@ export const registerApi = async (data: TRegister)  => {
 };
 
 // Логин
-export const loginApi = (data: TLogin) => {
-	return request("auth/login", {
+export const loginApi = async (data: TLogin) => {
+	return await request("auth/login", {
 		method: 'POST',
 		mode: 'cors',
 		cache: 'no-cache',

@@ -1,5 +1,5 @@
 import { TIngredient } from "../../utils/types";
-import { INGREDIENTS_ERROR, INGREDIENTS_LOAD_SUCCESS, INGREDIENTS_LOADING } from "./actions";
+import { INGREDIENTS_ERROR, INGREDIENTS_LOAD_SUCCESS, INGREDIENTS_LOADING } from "../constants";
 
 
 export type TIngredientState = {
@@ -9,17 +9,17 @@ export type TIngredientState = {
 }
 
 export interface IIngredientsLoadingAction {
-	type: typeof INGREDIENTS_LOADING;
+	readonly type: typeof INGREDIENTS_LOADING;
 };
 
 export interface IIngredientsLoadSuccessAction {
-	type: typeof INGREDIENTS_LOAD_SUCCESS;
-	payload: TIngredient[];
+	readonly type: typeof INGREDIENTS_LOAD_SUCCESS;
+	readonly payload: TIngredient[];
 };
 
 export interface IIngredientsErrorAction {
-	type: typeof INGREDIENTS_ERROR;
-	payload: string;
+	readonly type: typeof INGREDIENTS_ERROR;
+	readonly payload: string;
 };
 
 export type TIngredientsAction = 

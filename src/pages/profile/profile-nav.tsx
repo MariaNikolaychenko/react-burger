@@ -1,14 +1,27 @@
-import { NavLink } from "react-router-dom";
-import { useAuth } from "../../services/authProvider";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import styles from "./profile.module.css";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { logoutAction } from "../../services/auth/actions";
+import { useSelector } from "react-redux";
+import { getAuthInfo } from "../../services/auth/selectors";
+import { useEffect } from "react";
 
 
 export const ProfileNav = (): React.JSX.Element => {
-	const auth = useAuth();
+	const dispatch = useAppDispatch();
+	const navigate = useNavigate();
+	const { name, isLogoutSuccess } = useSelector(getAuthInfo);
+
+	useEffect(() => {
+		if (!name) {
+			navigate('/', { replace: true });
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [dispatch, isLogoutSuccess]);
 	
 	const handleLogout = () => {
-		auth.signOut();
+		dispatch(logoutAction());
 	}
 	return (
 		<nav className={styles.sidebar}>

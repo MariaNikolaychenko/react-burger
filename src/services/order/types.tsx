@@ -1,40 +1,70 @@
 import { TIngredient } from "../../utils/types";
-import { CLEAR_CONSTRUCTOR, NEW_ORDER_FAILED, NEW_ORDER_LOADING, NEW_ORDER_SUCCESS } from "./actions";
+import { CLEAR_CONSTRUCTOR, GET_ORDER_BY_NUMBER_FAILED, GET_ORDER_BY_NUMBER_LOADING, GET_ORDER_BY_NUMBER_SUCCESS, NEW_ORDER_FAILED, NEW_ORDER_LOADING, NEW_ORDER_SUCCESS } from "../constants";
+
+export type TOrder = {
+    ingredients: Array<TIngredient>;
+    _id: string;
+    status: string;
+    name: string;
+    number: number;
+	price: number;
+    createdAt: string;
+    updatedAt: string;
+	owner?: {
+		createdAt: string;
+		updatedAt: string;
+		email: string;
+		name: string;
+	}
+}
 
 export type TOrderState = {
-	isOrderRequest: boolean,
+	isOrderSuccess: boolean,
 	isOrderLoading: boolean,
 	isOrderFailed: boolean,
-	orderName: string | null,
-	orderNumber: number | null
+	isGetOrderByNumberLoading: boolean,
+	isGetOrderByNumberSuccess: boolean,
+	isGetOrderByNumberFailed: boolean,
+	order: TOrder | null,
+	currentOrder: TOrder | null
 }
 
 export interface INewOrderLoadingAction {
-	type: typeof NEW_ORDER_LOADING;
-	data: TIngredient
+	readonly order: any;
+	readonly type: typeof NEW_ORDER_LOADING
 };
 
 export interface INewOrderSuccessAction {
-	type: typeof NEW_ORDER_SUCCESS;
-	order: {
+	readonly type: typeof NEW_ORDER_SUCCESS;
+	readonly order: {
 		name: string;
-		order: {
-			number: number;
-		}
+		number: number;
 	}
 };
 
 export interface INewOrderFailedAction {
-	type: typeof NEW_ORDER_FAILED;
-	data: TIngredient
+	readonly type: typeof NEW_ORDER_FAILED;
+};
+export interface IGetOrderByNumberFailedAction {
+	readonly type: typeof GET_ORDER_BY_NUMBER_FAILED;
+};
+export interface IGetOrderByNumberLoadingAction {
+	readonly type: typeof GET_ORDER_BY_NUMBER_LOADING;
+};
+export interface IGetOrderByNumberSuccessAction {
+	payload: any;
+	readonly type: typeof GET_ORDER_BY_NUMBER_SUCCESS;
 };
 
 export interface IClearConstructorAction {
-	type: typeof CLEAR_CONSTRUCTOR;
+	readonly type: typeof CLEAR_CONSTRUCTOR;
 };
 
 export type TOrderActions = 
 	INewOrderLoadingAction |
 	INewOrderSuccessAction |
 	INewOrderFailedAction |
+	IGetOrderByNumberLoadingAction |
+	IGetOrderByNumberSuccessAction |
+	IGetOrderByNumberFailedAction |
 	IClearConstructorAction;

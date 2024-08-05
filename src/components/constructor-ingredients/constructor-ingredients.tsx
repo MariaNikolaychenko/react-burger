@@ -11,7 +11,7 @@ import { useAppDispatch } from "../../hooks/useAppDispatch";
 import {
 	DELETE_INGREDIENT,
 	SORT_INGREDIENTS
-} from "../../services/burger-constructor/actions";
+} from "../../services/constants";
 
 import { TConstructorIngredient } from "../../utils/types";
 

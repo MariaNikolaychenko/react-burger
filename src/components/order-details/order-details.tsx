@@ -2,7 +2,7 @@ import acceptedImage from "../../images/checkWithBg.svg";
 import styles from "./order-details.module.css";
 
 type TOrderDetailsProps = {
-	orderNumber: number
+	orderNumber?: number
 }
 
 const OrderDetails = ({ orderNumber }: TOrderDetailsProps): React.JSX.Element => {

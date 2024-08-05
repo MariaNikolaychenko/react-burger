@@ -2,12 +2,9 @@ import {
 	ADD_INGREDIENT, 
 	ADD_INGREDIENT_BUN,
 	DELETE_INGREDIENT,
-	SORT_INGREDIENTS
-} from './actions';
-
-import {
+	SORT_INGREDIENTS,
 	CLEAR_CONSTRUCTOR
-} from '../order/actions';
+} from '../constants';
 
 import { TBurgerConstructorActions, TBurgerConstructorState } from './types';
 
