@@ -13,7 +13,7 @@ const AppHeader = (): React.JSX.Element => {
 		<header className={styles.header}>
 			<div className={styles.wrapper}>
 				<div className={styles.logo}>
-					<a href="/">
+					<a href="./">
 						<Logo />
 					</a>
 				</div>
