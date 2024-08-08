@@ -29,10 +29,10 @@ describe('Burger constructor works correctly', () => {
 
 	it('should drag and drop 2 ingredients to Burger Constructor', () => {
 		cy.get('[data-testid^="souce-card_"]').first().trigger('dragstart');
-		cy.get('[data-testid="drop-area"]').trigger('drop');
+		cy.get('[data-testid="drop-area"]').trigger('drop', {force: true});
 
 		cy.get('[data-testid^="filling-card_"]').first().trigger('dragstart');
-		cy.get('[data-testid="drop-area"]').trigger('drop');
+		cy.get('[data-testid="drop-area"]').trigger('drop', {force: true});
 		
 		cy.get('[data-testid="empty-ingredients"]').should('not.exist');
 	});
