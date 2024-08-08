@@ -8,7 +8,7 @@ import {
 } from '../constants'
 import { TOrderActions, TOrderState } from './types';
 
-const initialState = {
+export const initialState = {
 	isOrderLoading: false,
 	isOrderSuccess: false,
 	isOrderFailed: false,
