@@ -111,7 +111,7 @@ const BurgerConstructor = () => {
 
 	return (
 		<div className={styles.container}>
-			<div className={`${styles.list} ${isActive ? styles.onHover : ''}`} ref={dropTarger} >
+			<div className={`${styles.list} ${isActive ? styles.onHover : ''}`} ref={dropTarger} data-testid="drop-area" >
 				<div className={styles.bun}>
 					{bun 
 						?
@@ -174,6 +174,7 @@ const BurgerConstructor = () => {
 					type="primary" 
 					size="large" 
 					extraClass="ml-10"
+					data-testid="place-order"
 				>
 					Оформить заказ
 				</Button>

@@ -9,7 +9,7 @@ import { TIngredientsAction, TIngredientState } from "./types";
 const initialState = {
 	ingredients: [],
 	loading: false,
-    error: null
+	error: null
 }
 
 export const reducer = ( state: TIngredientState = initialState, action: TIngredientsAction) => {

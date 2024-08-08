@@ -24,7 +24,7 @@ const IngredientDetails = (): React.JSX.Element => {
 	const { name, image_large,  calories, proteins, fat, carbohydrates } = ingredient;
 
 	return (
-		<div>
+		<div data-testid="ingredient-details">
 			<img
 				className={styles.image}
 				src={image_large}

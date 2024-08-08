@@ -48,7 +48,7 @@ const Modal = ({ children, header, onClose }: TModalProps): React.JSX.Element =>
 		(
 			<>
 				<ModalOverlay onClose={handleClose}/>
-				<div className={styles.modal}>
+				<div className={styles.modal} data-testid="modal">
 					<div className={styles.dialog}>
 						<Button
 							extraClass={styles.closeButton}
@@ -56,11 +56,12 @@ const Modal = ({ children, header, onClose }: TModalProps): React.JSX.Element =>
 							type="secondary"
 							size="medium"
 							onClick={handleClose}
+							data-testid="modal-close_button"
 						>
 							<CloseIcon type="primary" />
 						</Button>
 						{header &&
-							<h3 className={styles.header}>{header}</h3>
+							<h3 className={styles.header} data-testid="modal-header">{header}</h3>
 						}
 						{children}
 					</div>

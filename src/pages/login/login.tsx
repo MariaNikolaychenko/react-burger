@@ -56,17 +56,20 @@ export const Login = (): React.JSX.Element => {
 				name="email" 
 				value={form.email}  
 				onChange={handleChange} 
+				data-testid="email"
 			/>
 			<PasswordInput 
 				extraClass="mt-6" 
 				name="password" 
 				value={form.password} 
-				onChange={handleChange}  
+				onChange={handleChange} 
+				data-testid="password"
 			/>
 			<Button 
 				type="primary" 
 				extraClass="mt-6" 
 				htmlType="submit" 
+				data-testid="submit"
 			>
 				Войти
 			</Button>

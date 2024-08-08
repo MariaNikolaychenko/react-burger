@@ -100,11 +100,12 @@ const BurgerIngredients = () => {
 						Булки
 					</p>
 					<div className={styles.cardList}>
-						{ingredients.filter((ingredient: { type: TIngredientType }) => ingredient.type === "bun").map((ingredient: TIngredient) => (
+						{ingredients.filter((ingredient: { type: TIngredientType }) => ingredient.type === "bun").map((ingredient: TIngredient, index) => (
 							<Link 
 								key={ingredient._id}
 								to={`/ingredients/${ingredient._id}`}
 								state={{background: location}}
+								data-testid={`bun-card_${index}`}
 							>
 								<IngredientCard data={ingredient} count={getCount[ingredient._id]}/>
 							</Link>
@@ -116,11 +117,12 @@ const BurgerIngredients = () => {
 						Соусы
 					</p>
 					<div className={styles.cardList}>
-						{ingredients.filter((ingredient: { type: TIngredientType }) => ingredient.type === "sauce").map((ingredient: TIngredient) => (
+						{ingredients.filter((ingredient: { type: TIngredientType }) => ingredient.type === "sauce").map((ingredient: TIngredient, index) => (
 							<Link 
 								key={ingredient._id}
 								to={`/ingredients/${ingredient._id}`}
 								state={{background: location}}
+								data-testid={`ingredient-card_${index}`}
 							>
 								<IngredientCard data={ingredient} count={getCount[ingredient._id]} />
 							</Link>
