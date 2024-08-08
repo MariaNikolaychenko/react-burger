@@ -1,9 +1,5 @@
-import { reducer } from "../services/ingredient/reducer";
+import { initialState, reducer } from "../services/ingredient/reducer";
 import { DELETE_CURRENT_INGREDIENT, SET_CURRENT_INGREDIENT } from "../services/constants";
-
-const initialState = {
-	currentIngredient: null
-}
 
 const ingredientTest = {
     "_id": "60666c42cc7b410027a1a9b6",

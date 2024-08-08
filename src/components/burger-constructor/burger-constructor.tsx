@@ -124,7 +124,10 @@ const BurgerConstructor = () => {
 								extraClass={`${styles.bunElement} ${styles.widthAuto}`}
 							/>
 						:
-						<div className={`${styles.emptyConstructorItem} ${styles.emptyConstructorItemPosTop}`}>
+						<div 
+							className={`${styles.emptyConstructorItem} ${styles.emptyConstructorItemPosTop}`} 
+							data-testid="empty-top-bun"
+						>
 							Выберите булку
 						</div>
 					}
@@ -142,7 +145,7 @@ const BurgerConstructor = () => {
 							/>
 							))
 						:
-						<div className={styles.emptyConstructorItem} >
+						<div className={styles.emptyConstructorItem} data-testid="empty-ingredient">
 							Выберите начинку
 						</div>
 					}
@@ -160,7 +163,10 @@ const BurgerConstructor = () => {
 								extraClass={`${styles.bunElement} ${styles.widthAuto}`}
 							/>
 						:
-						<div className={`${styles.emptyConstructorItem} ${styles.emptyConstructorItemPosBottom}`}>
+						<div 
+							className={`${styles.emptyConstructorItem} ${styles.emptyConstructorItemPosBottom}`}
+							data-testid="empty-bottom-bun"
+						>
 							Выберите булку
 						</div>
 					}

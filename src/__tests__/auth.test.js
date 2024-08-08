@@ -1,28 +1,5 @@
-import { reducer } from "../services/auth/reducer";
+import { initialState, reducer } from "../services/auth/reducer";
 import { FORGOT_PASSWORD_FAILED, FORGOT_PASSWORD_SUCCESS, GET_USER_DATA_FAILED, GET_USER_DATA_LOADING, GET_USER_DATA_SUCCESS, LOGIN, LOGIN_FAILED, LOGIN_SUCCESS, LOGOUT_FAILED, LOGOUT_SUCCESS, REFRESH_TOKEN_FAILED, REFRESH_TOKEN_SUCCESS, REGISTER_FAILED, REGISTER_LOADING, REGISTER_SUCCESS, RESET_PASSWORD_FAILED, RESET_PASSWORD_SUCCESS, UPDATE_USER_DATA_FAILED, UPDATE_USER_DATA_SUCCESS } from "../services/constants";
-
-const initialState = {
-	email: '',
-	name: '',
-	isRegisterSuccess: false,
-	isRegisterFailed: null,
-	isLoginLoading: false,
-	isLoginSuccess: false,
-	isLoginFailed: null,
-	isLogoutSuccess: false,
-	isLogoutFailed: null,
-	isRefreshTokenSuccess: false,
-	isRefreshTokenFailed: null,
-	isGetUserLoading: false,
-	isGetUserSuccess: false,
-	isGetUserFailed: null,
-	isUpdateUserSuccess: false,
-	isUpdateUserFailed: null,
-	isForgotSuccess: false,
-	isForgotFailed: null,
-	isResetPasswordSuccess: false,
-	isResetPasswordFailed: null
-};
 
 const userTest = {
 	name: 'Test User',

@@ -23,7 +23,7 @@ import {
 
 import { TAuthActions, TAuthState } from './types';
 
-const initialState = {
+export const initialState = {
 	email: '',
 	name: '',
 

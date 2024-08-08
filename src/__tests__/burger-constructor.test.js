@@ -1,10 +1,5 @@
-import { reducer } from "../services/burger-constructor/reducer";
+import { initialState, reducer } from "../services/burger-constructor/reducer";
 import { ADD_INGREDIENT, ADD_INGREDIENT_BUN, CLEAR_CONSTRUCTOR, DELETE_INGREDIENT, SORT_INGREDIENTS } from "../services/constants";
-
-const initialState = {
-	bun: null,
-	fillings: []
-};
 
 const ingredientTest = {
     "_id": "60666c42cc7b410027a1a9b6",

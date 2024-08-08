@@ -1,11 +1,5 @@
-import { reducer } from "../services/burger-ingredients/reducer";
+import { initialState, reducer } from "../services/burger-ingredients/reducer";
 import { INGREDIENTS_ERROR, INGREDIENTS_LOAD_SUCCESS, INGREDIENTS_LOADING } from "../services/constants";
-
-const initialState = {
-	ingredients: [],
-	loading: false,
-    error: null
-}
 
 const ingredientTest = {
     "_id": "60666c42cc7b410027a1a9b6",

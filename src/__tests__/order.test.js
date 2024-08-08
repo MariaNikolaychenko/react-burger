@@ -1,18 +1,5 @@
-import { reducer } from "../services/order/reducer";
+import { initialState, reducer } from "../services/order/reducer";
 import { GET_ORDER_BY_NUMBER_FAILED, GET_ORDER_BY_NUMBER_LOADING, GET_ORDER_BY_NUMBER_SUCCESS, NEW_ORDER_FAILED, NEW_ORDER_LOADING, NEW_ORDER_SUCCESS } from "../services/constants";
-
-const initialState = {
-	isOrderLoading: false,
-	isOrderSuccess: false,
-	isOrderFailed: false,
-	isGetOrderByNumberLoading: false,
-	isGetOrderByNumberSuccess: false,
-	isGetOrderByNumberFailed: false,
-	order: null,
-	orderName: '',
-	orderNumber: null,
-	currentOrder: null
-};
 
 const orderTest = {
 	ingredients: ["643d69a5c3f7b9001cfa093d", "643d69a5c3f7b9001cfa0948"],

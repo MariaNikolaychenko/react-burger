@@ -1,11 +1,5 @@
 import { WS_USER_CONNECTION_CLOSED, WS_USER_CONNECTION_ERROR, WS_USER_CONNECTION_SUCCESS, WS_USER_GET_MESSAGE } from "../services/constants";
-import { wsReducer as reducer} from "../services/ws/wsReducerUserOrders";
-
-const initialState = {
-	wsConnected: false,
-	messages: [],
-	error: undefined
-};
+import { initialState, wsReducer as reducer} from "../services/ws/wsReducerUserOrders";
 
 const orderTest = {
 	ingredients: ["643d69a5c3f7b9001cfa093d", "643d69a5c3f7b9001cfa0948"],

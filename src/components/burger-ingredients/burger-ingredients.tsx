@@ -122,7 +122,7 @@ const BurgerIngredients = () => {
 								key={ingredient._id}
 								to={`/ingredients/${ingredient._id}`}
 								state={{background: location}}
-								data-testid={`ingredient-card_${index}`}
+								data-testid={`souce-card_${index}`}
 							>
 								<IngredientCard data={ingredient} count={getCount[ingredient._id]} />
 							</Link>
@@ -134,11 +134,12 @@ const BurgerIngredients = () => {
 						Начинки
 					</p>
 					<div className={styles.cardList}>
-						{ingredients.filter((ingredient: { type: TIngredientType }) => ingredient.type === "main").map((ingredient: TIngredient) => (
+						{ingredients.filter((ingredient: { type: TIngredientType }) => ingredient.type === "main").map((ingredient: TIngredient, index) => (
 							<Link 
 								key={ingredient._id}
 								to={`/ingredients/${ingredient._id}`}
 								state={{background: location}}
+								data-testid={`filling-card_${index}`}
 							>
 								<IngredientCard data={ingredient} count={getCount[ingredient._id]} />
 							</Link>
