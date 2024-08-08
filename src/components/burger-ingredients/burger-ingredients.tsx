@@ -122,7 +122,7 @@ const BurgerIngredients = () => {
 								key={ingredient._id}
 								to={`/ingredients/${ingredient._id}`}
 								state={{background: location}}
-								data-testid={`souce-card_${index}`}
+								data-testid={`sauce-card_${index}`}
 							>
 								<IngredientCard data={ingredient} count={getCount[ingredient._id]} />
 							</Link>
